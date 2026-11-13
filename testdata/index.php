@@ -44,7 +44,7 @@ switch ($op) {
             loadSampleData();
         } else {
             xoops_cp_header();
-            xoops_confirm(['ok' => 1, 'op' => 'load'], 'index.php', \constant('_CO_WGTEAMSADD_SAMPLEDATA_OK'), \constant('_CO_WGTEAMSCONFIRM'));
+            xoops_confirm(['ok' => 1, 'op' => 'load'], 'index.php', \constant('_CO_WGTEAMS_ADD_SAMPLEDATA_OK'), \constant('_CO_WGTEAMS_CONFIRM'));
             xoops_cp_footer();
         }
         break;
@@ -94,7 +94,7 @@ function loadSampleData()
             $utility::rcopy($src, $dest);
         }
     }
-    \redirect_header('../admin/index.php', 1, \constant('_CO_WGTEAMSSAMPLEDATA_SUCCESS'));
+    \redirect_header('../admin/index.php', 1, \constant('_CO_WGTEAMS_SAMPLEDATA_SUCCESS'));
 }
 
 function saveSampleData()
@@ -135,7 +135,7 @@ function saveSampleData()
             Utility::rcopy($src, $dest);
         }
     }
-    \redirect_header('../admin/index.php', 1, \constant('_CO_WGTEAMSSAVE_SAMPLEDATA_SUCCESS'));
+    \redirect_header('../admin/index.php', 1, \constant('_CO_WGTEAMS_SAVE_SAMPLEDATA_SUCCESS'));
 }
 
 function exportSchema()
@@ -148,9 +148,9 @@ function exportSchema()
         //        $migrate = new Wgsimpleacc\Migrate($moduleDirName);
         //        $migrate->saveCurrentSchema();
         //
-        //        \redirect_header('../admin/index.php', 1, \constant('_CO_WGTEAMSEXPORT_SCHEMA_SUCCESS'));
+        //        \redirect_header('../admin/index.php', 1, \constant('_CO_WGTEAMS_EXPORT_SCHEMA_SUCCESS'));
     } catch (\Exception $e) {
-        exit(\constant('_CO_WGTEAMSEXPORT_SCHEMA_ERROR'));
+        exit(\constant('_CO_WGTEAMS_EXPORT_SCHEMA_ERROR'));
     }
 
 }
