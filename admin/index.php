@@ -61,8 +61,8 @@ foreach (\array_keys($folder) as $i) {
     $adminObject->addConfigBoxLine($folder[$i], 'folder');
     $adminObject->addConfigBoxLine([$folder[$i], '777'], 'chmod');
 }
-// Render Index
-$adminObject->displayNavigation(\basename(__FILE__));
+// Render Navigation
+$GLOBALS['xoopsTpl']->assign('navigation', $adminObject->renderNavigation('index.php'));
 //------------- Test Data ----------------------------
 
 if ($helper->getConfig('displaySampleButton')) {
@@ -73,58 +73,16 @@ if ($helper->getConfig('displaySampleButton')) {
     if (1 == $displaySampleButton) {
         \xoops_loadLanguage('admin/modulesadmin', 'system');
         require \dirname(__DIR__) . '/testdata/index.php';
-        $adminObject->addItemButton(\constant('_CO_WGTEAMS_ADD_SAMPLEDATA'), '__DIR__ . /../../testdata/index.php?op=load');
-        $adminObject->addItemButton(\constant('_CO_WGTEAMS_SAVE_SAMPLEDATA'), '__DIR__ . /../../testdata/index.php?op=save');
-        //    $adminObject->addItemButton(\constant('_CO_WGTEAMS_EXPORT_SCHEMA'), '__DIR__ . /../../testdata/index.php?op=exportschema', 'add');
-        $adminObject->addItemButton(\constant('_CO_WGTEAMS_HIDE_SAMPLEDATA_BUTTONS'), '?op=hide_buttons', 'delete');
-    } else {
-        $adminObject->addItemButton(\constant('_CO_WGTEAMS_SHOW_SAMPLEDATA_BUTTONS'), '?op=show_buttons');
-        $displaySampleButton = $config['displaySampleButton'];
+        $adminObject->addItemButton(\_CO_WGTIMELINES_LOAD_SAMPLEDATA, '__DIR__ . /../../testdata/index.php?op=load');
+        $adminObject->addItemButton(\_CO_WGTIMELINES_SAVE_SAMPLEDATA, '__DIR__ . /../../testdata/index.php?op=save');
+        //    $adminObject->addItemButton(\_CO_WGTIMELINES_EXPORT_SCHEMA, '__DIR__ . /../../testdata/index.php?op=exportschema', 'add');
+        $adminObject->addItemButton(\_CO_WGTEAMS_HIDE_SAMPLEDATA_BUTTONS, '?op=hide_buttons', 'delete');
     }
-    $adminObject->displayButton('left', '');
+    $adminObject->renderButton('left', '');
 }
 //------------- End Test Data ----------------------------
-$adminObject->displayIndex();
 
-/**
- * @param $yamlFile
- * @return array|bool
- */
-function loadAdminConfig($yamlFile)
-{
-    $config = Yaml::readWrapped($yamlFile); // work with phpmyadmin YAML dumps
-    return $config;
-}
-
-/**
- * @param $yamlFile
- */
-function hideButtons($yamlFile)
-{
-    $app['displaySampleButton'] = 0;
-    Yaml::save($app, $yamlFile);
-    \redirect_header('index.php', 0);
-}
-
-/**
- * @param $yamlFile
- */
-function showButtons($yamlFile)
-{
-    $app['displaySampleButton'] = 1;
-    Yaml::save($app, $yamlFile);
-    \redirect_header('index.php', 0);
-}
-
-$op = \Xmf\Request::getString('op', 0, 'GET');
-
-switch ($op) {
-    case 'hide_buttons':
-        hideButtons($yamlFile);
-        break;
-    case 'show_buttons':
-        showButtons($yamlFile);
-        break;
-}
+// Render index
+$GLOBALS['xoopsTpl']->assign('index', $adminObject->renderIndex());
 
 require __DIR__ . '/footer.php';

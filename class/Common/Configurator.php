@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace XoopsModules\Wgteams\Common;
 
@@ -15,30 +15,29 @@ namespace XoopsModules\Wgteams\Common;
  * Configurator Class
  *
  * @copyright   XOOPS Project (https://xoops.org)
- * @license     http://www.fsf.org/copyleft/gpl.html GNU public license
+ * @license     https://www.fsf.org/copyleft/gpl.html GNU public license
  * @author      XOOPS Development Team
- * @package     Publisher
  * @since       1.05
  */
 
+defined('XOOPS_ROOT_PATH') || exit('Restricted access');
 
 /**
  * Class Configurator
  */
 class Configurator
 {
-    public $name;
-    public $paths           = [];
-    public $uploadFolders   = [];
-    public $copyBlankFiles  = [];
-    public $copyTestFolders = [];
-    public $templateFolders = [];
-    public $oldFiles        = [];
-    public $oldFolders      = [];
-    public $renameTables    = [];
-    public $renameColumns   = [];
-    public $moduleStats     = [];
-    public $modCopyright;
+    public string $name;
+    public array $paths           = [];
+    public array $uploadFolders   = [];
+    public array $copyBlankFiles  = [];
+    public array $copyTestFolders = [];
+    public array $templateFolders = [];
+    public array $oldFiles        = [];
+    public array $oldFolders      = [];
+    public array $renameTables    = [];
+    public array $moduleStats     = [];
+    public string $modCopyright;
 
     /**
      * Configurator constructor.
@@ -56,7 +55,6 @@ class Configurator
         $this->oldFiles        = $config->oldFiles;
         $this->oldFolders      = $config->oldFolders;
         $this->renameTables    = $config->renameTables;
-        $this->renameColumns   = $config->renameColumns;
         $this->moduleStats     = $config->moduleStats;
         $this->modCopyright    = $config->modCopyright;
     }
