@@ -9,7 +9,7 @@
     <{/if}>
         <div class='<{if $member.rel_tablestyle|default:'' == 'wgteams-striped'}><{cycle values="wgteams-odd, wgteams-even"}><{else}><{$member.rel_tablestyle}><{/if}>'>
             <{if $member.member_labels|default:false}>
-                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 member-label"><{$smarty.const._MA_WGTEAMS_MEMBER_NAME}></div>
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 member-label"><{$smarty.const._MD_WGTEAMS_MEMBER_NAME}></div>
                 <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 member-text member-name">
             <{else}>
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 member-text member-name">
@@ -19,7 +19,7 @@
         <{if $member.member_address|default:false}>
             <div class='<{if $member.rel_tablestyle|default:'' == 'wgteams-striped'}><{cycle values="wgteams-odd, wgteams-even"}><{else}><{$member.rel_tablestyle}><{/if}>'>
                 <{if $member.member_labels|default:false}>
-                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 member-label"><{$smarty.const._MA_WGTEAMS_MEMBER_ADDRESS}></div>
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 member-label"><{$smarty.const._MD_WGTEAMS_MEMBER_ADDRESS}></div>
                     <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 member-text member-address">
                 <{else}>
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 member-text member-address">
@@ -30,7 +30,7 @@
         <{if $member.member_phone|default:false}>
             <div class='<{if $member.rel_tablestyle|default:'' == 'wgteams-striped'}><{cycle values="wgteams-odd, wgteams-even"}><{else}><{$member.rel_tablestyle}><{/if}>'>
                 <{if $member.member_labels|default:false}>
-                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 member-label"><{$smarty.const._MA_WGTEAMS_MEMBER_PHONE}></div>
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 member-label"><{$smarty.const._MD_WGTEAMS_MEMBER_PHONE}></div>
                     <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 member-label member-phone">
                 <{else}>
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 member-text member-phone">
@@ -41,7 +41,7 @@
         <{if $member.member_email|default:false}>
             <div class='<{if $member.rel_tablestyle|default:'' == 'wgteams-striped'}><{cycle values="wgteams-odd, wgteams-even"}><{else}><{$member.rel_tablestyle}><{/if}>'>
                 <{if $member.member_labels|default:false}>
-                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 member-label"><{$smarty.const._MA_WGTEAMS_MEMBER_EMAIL}></div>
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 member-label"><{$smarty.const._MD_WGTEAMS_MEMBER_EMAIL}></div>
                     <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 member-label member-email">
                 <{else}>
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 member-text member-email">

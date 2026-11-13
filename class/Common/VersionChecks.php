@@ -118,7 +118,7 @@ trait VersionChecks
                     $latestVersion     = $file[0]->tag_name;
                     $prerelease        = $file[0]->prerelease;
                     if ('master' !== $latestVersionLink) {
-                        $update = \constant('CO_' . $moduleDirNameUpper . '_' . 'NEW_VERSION') . $latestVersion;
+                        $update = \constant('_CO_WGTEAMS_NEW_VERSION') . $latestVersion;
                     }
                     //"PHP-standardized" version
                     $latestVersion = \mb_strtolower($latestVersion);

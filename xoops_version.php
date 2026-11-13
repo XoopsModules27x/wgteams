@@ -33,10 +33,10 @@ $moduleDirNameUpper = \mb_strtoupper($moduleDirName);
 
 // ------------------- Information ------------------- /
 $modversion = [
-    'version'             => '2.0.3',
+    'version'             => '2.1.0',
     'module_status'       => 'Beta1',
-    'release'             => '2025/10/23', // format: yyyy/mm/dd
-    'release_date'        => '2025/10/23', // format: yyyy/mm/dd
+    'release'             => '2026/11/13', // format: yyyy/mm/dd
+    'release_date'        => '2026/11/13', // format: yyyy/mm/dd
     'name'                => _MI_WGTEAMS_NAME,
     'description'         => _MI_WGTEAMS_DESC,
     'author'              => 'Goffy - Wedega.com',
@@ -51,10 +51,10 @@ $modversion = [
     'release_file'        => \XOOPS_URL . '/modules/wgteams/docs/release_info file',
     'manual'              => 'link to manual file',
     'manual_file'         => \XOOPS_URL . '/modules/wgteams/docs/install.txt',
-    'min_php'             => '7.4',
-    'min_xoops'           => '2.5.11',
+    'min_php'             => '8.4',
+    'min_xoops'           => '2.7.4',
     'min_admin'           => '1.2',
-    'min_db'              => ['mysql' => '5.5'],
+    'min_db'              => ['mysql' => '8.0', 'mysqli' => '8.0'],
     'image'               => 'assets/images/wgteams_logo.png',
     'dirname'             => $moduleDirName,
     // Frameworks
@@ -389,8 +389,8 @@ $modversion['config'][] = [
  */
 $modversion['config'][] = [
     'name'        => 'displaySampleButton',
-    'title'       => 'CO_' . $moduleDirNameUpper . '_' . 'SHOW_SAMPLE_BUTTON',
-    'description' => 'CO_' . $moduleDirNameUpper . '_' . 'SHOW_SAMPLE_BUTTON_DESC',
+    'title'       => '_CO_WGTEAMSSHOW_SAMPLE_BUTTON',
+    'description' => '_CO_WGTEAMSSHOW_SAMPLE_BUTTON_DESC',
     'formtype'    => 'yesno',
     'valuetype'   => 'int',
     'default'     => 1,
@@ -401,8 +401,8 @@ $modversion['config'][] = [
  */
 /* $modversion['config'][] = [
     'name'        => 'displayDeveloperTools',
-    'title'       => 'CO_' . $moduleDirNameUpper . '_' . 'SHOW_DEV_TOOLS',
-    'description' => 'CO_' . $moduleDirNameUpper . '_' . 'SHOW_DEV_TOOLS_DESC',
+    'title'       => '_CO_WGTEAMSSHOW_DEV_TOOLS',
+    'description' => '_CO_WGTEAMSSHOW_DEV_TOOLS_DESC',
     'formtype'    => 'yesno',
     'valuetype'   => 'int',
     'default'     => 0,

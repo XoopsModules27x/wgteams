@@ -7,24 +7,24 @@
         </tr>
     <{/if}>
     <tr>
-        <td class="member-label"><{$smarty.const._MA_WGTEAMS_MEMBER_NAME}></td>
+        <td class="member-label"><{$smarty.const._MD_WGTEAMS_MEMBER_NAME}></td>
         <td class="member-text member-name"><{$member.member_name}></td>
     </tr>
     <{if $member.member_address|default:false}>
         <tr>
-            <td class="member-label"><{$smarty.const._MA_WGTEAMS_MEMBER_ADDRESS}></td>
+            <td class="member-label"><{$smarty.const._MD_WGTEAMS_MEMBER_ADDRESS}></td>
             <td class="member-text member-address"><{$member.member_address}></td>
         </tr>
     <{/if}>
     <{if $member.member_phone|default:false}>
         <tr>
-            <td class="member-label"><{$smarty.const._MA_WGTEAMS_MEMBER_PHONE}></td>
+            <td class="member-label"><{$smarty.const._MD_WGTEAMS_MEMBER_PHONE}></td>
             <td class="member-text member-phone"><{$member.member_phone}></td>
         </tr>
     <{/if}>
     <{if $member.member_email|default:false}>
         <tr>
-            <td class="member-label"><{$smarty.const._MA_WGTEAMS_MEMBER_EMAIL}></td>
+            <td class="member-label"><{$smarty.const._MD_WGTEAMS_MEMBER_EMAIL}></td>
             <td class="member-text member-email"><{$member.member_email}></td>
         </tr>
     <{/if}>
