@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace XoopsModules\Wgteams\Common;
 
@@ -12,9 +12,11 @@ namespace XoopsModules\Wgteams\Common;
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+defined('XOOPS_ROOT_PATH') || exit('Restricted access');
+
 /**
  * @copyright   XOOPS Project (https://xoops.org)
- * @license     http://www.fsf.org/copyleft/gpl.html GNU public license
+ * @license     https://www.fsf.org/copyleft/gpl.html GNU public license
  * @author      mamba <mambax7@gmail.com>
  */
 trait VersionChecks
@@ -24,13 +26,12 @@ trait VersionChecks
      * @static
      *
      * @param \XoopsModule|null $module
-     * @param null|string $requiredVer
+     * @param string|null $requiredVer
      * @return bool true if meets requirements, false if not
      */
-    public static function checkVerXoops(?\XoopsModule $module = null, $requiredVer = null)
+    public static function checkVerXoops(?\XoopsModule $module = null, ?string $requiredVer = null): bool
     {
         $moduleDirName      = \basename(\dirname(__DIR__, 2));
-        $moduleDirNameUpper = \mb_strtoupper($moduleDirName);
         if (null === $module) {
             $module = \XoopsModule::getByDirname($moduleDirName);
         }
@@ -44,9 +45,9 @@ trait VersionChecks
         }
         $success = true;
 
-        if ($module->versionCompare($currentVer, $requiredVer, '<')) {
+        if ($module->versionCompare($currentVer, $requiredVer)) {
             $success = false;
-            $module->setErrors(\sprintf(\constant('CO_' . $moduleDirNameUpper . '_ERROR_BAD_XOOPS'), $requiredVer, $currentVer));
+            $module->setErrors(\sprintf(\_CO_WGTEAMS_ERROR_BAD_XOOPS, $requiredVer, $currentVer));
         }
 
         return $success;
@@ -59,10 +60,9 @@ trait VersionChecks
      * @param \XoopsModule|null $module
      * @return bool true if meets requirements, false if not
      */
-    public static function checkVerPhp(?\XoopsModule $module = null)
+    public static function checkVerPhp(?\XoopsModule $module = null): bool
     {
         $moduleDirName      = \basename(\dirname(__DIR__, 2));
-        $moduleDirNameUpper = \mb_strtoupper($moduleDirName);
         if (null === $module) {
             $module = \XoopsModule::getByDirname($moduleDirName);
         }
@@ -75,7 +75,7 @@ trait VersionChecks
 
         if (false !== $reqVer && '' !== $reqVer) {
             if (\version_compare($verNum, $reqVer, '<')) {
-                $module->setErrors(\sprintf(\constant('CO_' . $moduleDirNameUpper . '_ERROR_BAD_PHP'), $reqVer, $verNum));
+                $module->setErrors(\sprintf(\_CO_WGTEAMS_ERROR_BAD_PHP, $reqVer, $verNum));
                 $success = false;
             }
         }
@@ -87,15 +87,14 @@ trait VersionChecks
      * compares current module version with the latest GitHub release
      * @static
      * @param \Xmf\Module\Helper $helper
-     * @param string|null            $source
-     * @param string|null            $default
+     * @param string|null        $source
+     * @param string|null        $default
      *
      * @return string|array info about the latest module version, if newer
      */
     public static function checkVerModule(\Xmf\Module\Helper $helper, ?string $source = 'github', ?string $default = 'master'): ?array
     {
         $moduleDirName      = \basename(\dirname(__DIR__, 2));
-        $moduleDirNameUpper = \mb_strtoupper($moduleDirName);
         $update             = '';
         $repository         = 'XoopsModules25x/' . $moduleDirName;
         //        $repository         = 'XoopsModules25x/publisher'; //for testing only
@@ -118,7 +117,7 @@ trait VersionChecks
                     $latestVersion     = $file[0]->tag_name;
                     $prerelease        = $file[0]->prerelease;
                     if ('master' !== $latestVersionLink) {
-                        $update = \constant('_CO_WGTEAMS_NEW_VERSION') . $latestVersion;
+                        $update = \_CO_WGTEAMS_NEW_VERSION . $latestVersion;
                     }
                     //"PHP-standardized" version
                     $latestVersion = \mb_strtolower($latestVersion);
@@ -137,7 +136,6 @@ trait VersionChecks
                         $ret[] = $latestVersionLink;
                     }
                 }
-                \curl_close($curlHandle);
             }
         }
 

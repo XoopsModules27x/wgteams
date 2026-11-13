@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace XoopsModules\Wgteams\Common;
 
@@ -12,6 +12,8 @@ namespace XoopsModules\Wgteams\Common;
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+defined('XOOPS_ROOT_PATH') || exit('Restricted access');
+
 use XoopsModules\Wgteams\Common;
 
 /**
@@ -20,15 +22,12 @@ use XoopsModules\Wgteams\Common;
  * @category  Migrate
  * @author    Richard Griffith <richard@geekwright.com>
  * @copyright 2016 XOOPS Project (https://xoops.org)
- * @license   GNU GPL 2 or later (https://www.gnu.org/licenses/gpl-2.0.html)
+ * @license   GNU GPL 2.0 or later (https://www.gnu.org/licenses/gpl-2.0.html)
  * @link      https://xoops.org
  */
-
 class Migrate extends \Xmf\Database\Migrate
 {
-    private $renameTables;
-
-    private $renameColumns;
+    private array $renameTables;
 
     /**
      * @param \XoopsModules\Wgteams\Common\Configurator|null $configurator
@@ -37,7 +36,6 @@ class Migrate extends \Xmf\Database\Migrate
     {
         if (null !== $configurator) {
             $this->renameTables = $configurator->renameTables;
-            $this->renameColumns = $configurator->renameColumns;
 
             $moduleDirName = \basename(\dirname(__DIR__, 2));
             parent::__construct($moduleDirName);
@@ -47,29 +45,11 @@ class Migrate extends \Xmf\Database\Migrate
     /**
      * change table prefix if needed
      */
-    private function changePrefix()
+    private function changePrefix(): void
     {
         foreach ($this->renameTables as $oldName => $newName) {
             if ($this->tableHandler->useTable($oldName) && !$this->tableHandler->useTable($newName)) {
                 $this->tableHandler->renameTable($oldName, $newName);
-            }
-        }
-    }
-
-    /**
-     * change column name of given table if needed
-     */
-    private function changeColumnNames()
-    {
-        foreach ($this->renameColumns as $table => $columns) {
-            if ($this->tableHandler->useTable($table)) {
-                foreach ($columns as $oldName => $newName) {
-                    $attributes = $this->tableHandler->getColumnAttributes($table, $oldName);
-                    if ('' != $attributes) {
-                        // column exists
-                        $this->tableHandler->alterColumn($table, $oldName, $attributes, $newName);
-                    }
-                }
             }
         }
     }
@@ -80,7 +60,7 @@ class Migrate extends \Xmf\Database\Migrate
      * @param string $tableName  table to convert
      * @param string $columnName column with IP address
      */
-    private function convertIPAddresses($tableName, $columnName)
+    protected function convertIPAddresses(string $tableName, string $columnName): void
     {
         if ($this->tableHandler->useTable($tableName)) {
             $attributes = $this->tableHandler->getColumnAttributes($tableName, $columnName);
@@ -98,7 +78,7 @@ class Migrate extends \Xmf\Database\Migrate
     /**
      * Move do* columns from newbb_posts to newbb_posts_text table
      */
-    private function moveDoColumns()
+    private function moveDoColumns(): void
     {
         $tableName    = 'newbb_posts_text';
         $srcTableName = 'newbb_posts';
@@ -122,18 +102,11 @@ class Migrate extends \Xmf\Database\Migrate
      *   table and column renames
      *   data conversions
      */
-    protected function preSyncActions()
+    protected function preSyncActions(): void
     {
-        if (\count($this->renameTables) > 0) {
-            // change 'bb' table prefix to 'newbb'
-            $this->changePrefix();
-        }
-        if (\count($this->renameColumns) > 0) {
-            // change 'bb' table prefix to 'newbb'
-            $this->changeColumnNames();
-        }
-
         /*
+        // change 'bb' table prefix to 'newbb'
+        $this->changePrefix();
         // columns dohtml, dosmiley, doxcode, doimage and dobr moved between tables as some point
         $this->moveDoColumns();
         // Convert IP address columns from int to readable varchar(45) for IPv6

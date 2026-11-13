@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace XoopsModules\Wgteams\Common;
 
@@ -12,9 +12,11 @@ namespace XoopsModules\Wgteams\Common;
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+defined('XOOPS_ROOT_PATH') || exit('Restricted access');
+
 /**
  * @copyright   XOOPS Project (https://xoops.org)
- * @license     http://www.fsf.org/copyleft/gpl.html GNU public license
+ * @license     https://www.fsf.org/copyleft/gpl.html GNU public license
  * @author      mamba <mambax7@gmail.com>
  */
 trait FilesManagement
@@ -27,7 +29,7 @@ trait FilesManagement
      * @return void
      * @throws \RuntimeException
      */
-    public static function createFolder($folder)
+    public static function createFolder(string $folder): void
     {
         try {
             if (!\file_exists($folder)) {
@@ -43,11 +45,11 @@ trait FilesManagement
     }
 
     /**
-     * @param $file
-     * @param $folder
+     * @param string $file
+     * @param string $folder
      * @return bool
      */
-    public static function copyFile($file, $folder)
+    public static function copyFile(string $file, string $folder): bool
     {
         return \copy($file, $folder);
     }
@@ -56,7 +58,7 @@ trait FilesManagement
      * @param $src
      * @param $dst
      */
-    public static function recurseCopy($src, $dst)
+    public static function recurseCopy($src, $dst): void
     {
         $dir = \opendir($src);
         //        @\mkdir($dst);
@@ -82,9 +84,9 @@ trait FilesManagement
      * @return      bool     Returns true on success, false on failure
      * @author      Aidan Lister <aidan@php.net>
      * @version     1.0.1
-     * @link        http://aidanlister.com/2004/04/recursively-copying-directories-in-php/
+     * @link        https://aidanlister.com/2004/04/recursively-copying-directories-in-php/
      */
-    public static function xcopy($source, $dest)
+    public static function xcopy(string $source, string $dest): bool
     {
         // Check for symlinks
         if (\is_link($source)) {
@@ -131,7 +133,7 @@ trait FilesManagement
      *
      * @uses \Xmf\Module\Helper::getHelper()
      */
-    public static function deleteDirectory($src)
+    public static function deleteDirectory(string $src): bool
     {
         // Only continue if user is a 'global' Admin
         if (!($GLOBALS['xoopsUser'] instanceof \XoopsUser) || !$GLOBALS['xoopsUser']->isAdmin()) {
@@ -144,8 +146,8 @@ trait FilesManagement
         // validate is a directory
         if ($dirInfo->isDir()) {
             $fileList = \array_diff(\scandir($src, \SCANDIR_SORT_NONE), ['..', '.']);
-            foreach ($fileList as $k => $v) {
-                $fileInfo = new \SplFileInfo("{$src}/{$v}");
+            foreach ($fileList as $v) {
+                $fileInfo = new \SplFileInfo("$src/$v");
                 if ($fileInfo->isDir()) {
                     // recursively handle subdirectories
                     if (!$success = self::deleteDirectory($fileInfo->getRealPath())) {
@@ -153,8 +155,10 @@ trait FilesManagement
                     }
                 } else {
                     // delete the file
-                    if (!($success = \unlink($fileInfo->getRealPath()))) {
-                        break;
+                    if (\file_exists($fileInfo->getRealPath()) && is_file($fileInfo->getRealPath())) {
+                        if (!($success = \unlink($fileInfo->getRealPath()))) {
+                            break;
+                        }
                     }
                 }
             }
@@ -179,7 +183,7 @@ trait FilesManagement
      *
      * @return bool true on success
      */
-    public static function rrmdir($src)
+    public static function rrmdir(string $src): bool
     {
         // Only continue if user is a 'global' Admin
         if (!($GLOBALS['xoopsUser'] instanceof \XoopsUser) || !$GLOBALS['xoopsUser']->isAdmin()) {
@@ -190,8 +194,6 @@ trait FilesManagement
         if (!\is_dir($src)) {
             return false;
         }
-
-        $success = true;
 
         // Open the source directory to read in files
         $iterator = new \DirectoryIterator($src);
@@ -208,6 +210,7 @@ trait FilesManagement
             }
         }
         $iterator = null;   // clear iterator Obj to close file/directory
+
         return \rmdir($src); // remove the directory & return results
     }
 
@@ -219,7 +222,7 @@ trait FilesManagement
      *
      * @return bool true on success
      */
-    public static function rmove($src, $dest)
+    public static function rmove(string $src, string $dest): bool
     {
         // Only continue if user is a 'global' Admin
         if (!($GLOBALS['xoopsUser'] instanceof \XoopsUser) || !$GLOBALS['xoopsUser']->isAdmin()) {
@@ -240,14 +243,15 @@ trait FilesManagement
         $iterator = new \DirectoryIterator($src);
         foreach ($iterator as $fObj) {
             if ($fObj->isFile()) {
-                \rename($fObj->getPathname(), "{$dest}/" . $fObj->getFilename());
+                \rename($fObj->getPathname(), "$dest/" . $fObj->getFilename());
             } elseif (!$fObj->isDot() && $fObj->isDir()) {
                 // Try recursively on directory
-                self::rmove($fObj->getPathname(), "{$dest}/" . $fObj->getFilename());
+                self::rmove($fObj->getPathname(), "$dest/" . $fObj->getFilename());
                 //                \rmdir($fObj->getPath()); // now delete the directory
             }
         }
         $iterator = null;   // clear iterator Obj to close file/directory
+
         return \rmdir($src); // remove the directory & return results
     }
 
@@ -262,7 +266,7 @@ trait FilesManagement
      *
      * @uses \Xmf\Module\Helper::getHelper()
      */
-    public static function rcopy($src, $dest)
+    public static function rcopy(string $src, string $dest): bool
     {
         // Only continue if user is a 'global' Admin
         if (!($GLOBALS['xoopsUser'] instanceof \XoopsUser) || !$GLOBALS['xoopsUser']->isAdmin()) {
@@ -283,9 +287,9 @@ trait FilesManagement
         $iterator = new \DirectoryIterator($src);
         foreach ($iterator as $fObj) {
             if ($fObj->isFile()) {
-                \copy($fObj->getPathname(), "{$dest}/" . $fObj->getFilename());
+                \copy($fObj->getPathname(), "$dest/" . $fObj->getFilename());
             } elseif (!$fObj->isDot() && $fObj->isDir()) {
-                self::rcopy($fObj->getPathname(), "{$dest}/" . $fObj->getFilename());
+                self::rcopy($fObj->getPathname(), "$dest/" . $fObj->getFilename());
             }
         }
 

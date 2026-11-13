@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace XoopsModules\Wgteams\Common;
 
@@ -16,16 +16,15 @@ namespace XoopsModules\Wgteams\Common;
  */
 
 /**
- *
  * @license      https://www.fsf.org/copyleft/gpl.html GNU public license
  * @copyright    https://xoops.org 2000-2020 &copy; XOOPS Project
  * @author       ZySpec <zyspec@yahoo.com>
  * @author       Mamba <mambax7@gmail.com>
  */
 
-use XoopsModules\Wgteams\{
-    Helper
-};
+defined('XOOPS_ROOT_PATH') || exit('Restricted access');
+
+use XoopsModules\Wgteams\Helper;
 
 /**
  * Class Utility
@@ -48,9 +47,8 @@ class SysUtility
      * Access the only instance of this class
      *
      * @return object
-     *
      */
-    public static function getInstance()
+    public static function getInstance(): object
     {
         static $instance;
         if (null === $instance) {
@@ -66,14 +64,14 @@ class SysUtility
      * www.cakephp.org
      *
      * @param string $text         String to truncate.
-     * @param int    $length       Length of returned string, including ellipsis.
+     * @param int $length       Length of returned string, including ellipsis.
      * @param string $ending       Ending to be appended to the trimmed string.
-     * @param bool   $exact        If false, $text will not be cut mid-word
-     * @param bool   $considerHtml If true, HTML tags would be handled correctly
+     * @param bool $exact        If false, $text will not be cut mid-word
+     * @param bool $considerHtml If true, HTML tags would be handled correctly
      *
      * @return string Trimmed string.
      */
-    public static function truncateHtml($text, $length = 100, $ending = '...', $exact = false, $considerHtml = true)
+    public static function truncateHtml(string $text, int $length = 100, string $ending = '...', bool $exact = false, bool $considerHtml = true): string
     {
         if ($considerHtml) {
             // if the plain text is shorter than the maximum length, return the whole text
@@ -147,7 +145,7 @@ class SysUtility
         if (!$exact) {
             // ...search the last occurance of a space...
             $spacepos = \mb_strrpos($truncate, ' ');
-            if (isset($spacepos)) {
+            if ($spacepos > 0) {
                 // ...and cut the text in this position
                 $truncate = \mb_substr($truncate, 0, $spacepos);
             }
@@ -165,11 +163,11 @@ class SysUtility
     }
 
     /**
-     * @param \Xmf\Module\Helper $helper
-     * @param array|null             $options
+     * @param \Xmf\Module\Helper|null $helper
+     * @param array|null $options
      * @return \XoopsFormDhtmlTextArea|\XoopsFormEditor
      */
-    public static function getEditor($helper = null, $options = null)
+    public static function getEditor(?\Xmf\Module\Helper $helper = null, ?array $options = null): \XoopsFormDhtmlTextArea|\XoopsFormEditor
     {
         /** @var Helper $helper */
         if (null === $options) {
@@ -190,9 +188,9 @@ class SysUtility
 
         if (\class_exists('XoopsFormEditor')) {
             if ($isAdmin) {
-                $descEditor = new \XoopsFormEditor(\ucfirst($options['name']), $helper->getConfig('editorAdmin'), $options, $nohtml = false, $onfailure = 'textarea');
+                $descEditor = new \XoopsFormEditor(\ucfirst($options['name']), $helper->getConfig('editorAdmin'), $options, false, 'textarea');
             } else {
-                $descEditor = new \XoopsFormEditor(\ucfirst($options['name']), $helper->getConfig('editorUser'), $options, $nohtml = false, $onfailure = 'textarea');
+                $descEditor = new \XoopsFormEditor(\ucfirst($options['name']), $helper->getConfig('editorUser'), $options, false, 'textarea');
             }
         } else {
             $descEditor = new \XoopsFormDhtmlTextArea(\ucfirst($options['name']), $options['name'], $options['value'], '100%', '100%');
@@ -209,10 +207,10 @@ class SysUtility
      *
      * @return bool
      */
-    public function fieldExists($fieldname, $table)
+    public function fieldExists($fieldname, $table): bool
     {
         global $xoopsDB;
-        $result = $xoopsDB->queryF("SHOW COLUMNS FROM   $table LIKE '$fieldname'");
+        $result = $xoopsDB->query("SHOW COLUMNS FROM   $table LIKE '$fieldname'");
 
         return ($xoopsDB->getRowsNum($result) > 0);
     }

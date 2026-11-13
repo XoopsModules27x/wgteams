@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace XoopsModules\Wgteams\Common;
 
@@ -16,7 +16,7 @@ namespace XoopsModules\Wgteams\Common;
  * Breadcrumb Class
  *
  * @copyright   XOOPS Project (https://xoops.org)
- * @license     http://www.fsf.org/copyleft/gpl.html GNU public license
+ * @license     https://www.fsf.org/copyleft/gpl.html GNU public license
  * @author      lucio <lucio.rota@gmail.com>
  * @package     Wgteams
  *
@@ -52,7 +52,7 @@ class Breadcrumb
      * @param string $title
      * @param string $link
      */
-    public function addLink($title = '', $link = '')
+    public function addLink(string $title = '', string $link = ''): void
     {
         $this->bread[] = [
             'link'  => $link,
@@ -63,7 +63,7 @@ class Breadcrumb
     /**
      * Render BreadCrumb
      */
-    public function render()
+    public function render(): false|string
     {
         if (!isset($GLOBALS['xoTheme']) || !\is_object($GLOBALS['xoTheme'])) {
             require $GLOBALS['xoops']->path('class/theme.php');

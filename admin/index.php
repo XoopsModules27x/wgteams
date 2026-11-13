@@ -73,12 +73,12 @@ if ($helper->getConfig('displaySampleButton')) {
     if (1 == $displaySampleButton) {
         \xoops_loadLanguage('admin/modulesadmin', 'system');
         require \dirname(__DIR__) . '/testdata/index.php';
-        $adminObject->addItemButton(\constant('_CO_WGTEAMS_ADD_SAMPLEDATA'), '__DIR__ . /../../testdata/index.php?op=load');
-        $adminObject->addItemButton(\constant('_CO_WGTEAMS_SAVE_SAMPLEDATA'), '__DIR__ . /../../testdata/index.php?op=save');
-        //    $adminObject->addItemButton(\constant('_CO_WGTEAMS_EXPORT_SCHEMA'), '__DIR__ . /../../testdata/index.php?op=exportschema', 'add');
-        $adminObject->addItemButton(\constant('_CO_WGTEAMS_HIDE_SAMPLEDATA_BUTTONS'), '?op=hide_buttons', 'delete');
+        $adminObject->addItemButton(\_CO_WGTEAMS_ADD_SAMPLEDATA, '__DIR__ . /../../testdata/index.php?op=load');
+        $adminObject->addItemButton(\_CO_WGTEAMS_SAVE_SAMPLEDATA, '__DIR__ . /../../testdata/index.php?op=save');
+        //    $adminObject->addItemButton(\_CO_WGTEAMS_EXPORT_SCHEMA, '__DIR__ . /../../testdata/index.php?op=exportschema', 'add');
+        $adminObject->addItemButton(\_CO_WGTEAMS_HIDE_SAMPLEDATA_BUTTONS, '?op=hide_buttons', 'delete');
     } else {
-        $adminObject->addItemButton(\constant('_CO_WGTEAMS_SHOW_SAMPLEDATA_BUTTONS'), '?op=show_buttons');
+        $adminObject->addItemButton(\_CO_WGTEAMS_SHOW_SAMPLEDATA_BUTTONS, '?op=show_buttons');
         $displaySampleButton = $config['displaySampleButton'];
     }
     $adminObject->displayButton('left', '');

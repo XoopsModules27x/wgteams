@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace XoopsModules\Wgteams\Common;
 
@@ -16,17 +16,17 @@ namespace XoopsModules\Wgteams\Common;
  * Wgteams module
  *
  * @copyright       XOOPS Project (https://xoops.org)
- * @license         GNU GPL 2 or later (https://www.gnu.org/licenses/gpl-2.0.html)
+ * @license         GNU GPL 2.0 or later (https://www.gnu.org/licenses/gpl-2.0.html)
  * @author          Xoops Development Team
  */
 
 use Xmf\Request;
+use XoopsModules\Wgteams;
 
 //\defined('XOOPS_ROOT_PATH') || die('XOOPS root path not defined');
 
 require_once \dirname(__DIR__, 4) . '/mainfile.php';
 $moduleDirName      = \basename(\dirname(__DIR__, 2));
-$moduleDirNameUpper = \mb_strtoupper($moduleDirName);
 \xoops_loadLanguage('filechecker', $moduleDirName);
 
 /**
@@ -36,44 +36,44 @@ $moduleDirNameUpper = \mb_strtoupper($moduleDirName);
 class FileChecker
 {
     /**
-     * @param string      $file_path
+     * @param string $file_path
+     * @param string $redirectFile
      * @param string|null $original_file_path
-     * @param string      $redirectFile
+     *
      * @return bool|string
      */
-    public static function getFileStatus($file_path, $original_file_path = null, $redirectFile)
+    public static function getFileStatus(string $file_path, string $redirectFile, ?string $original_file_path = null): bool|string
     {
         $pathIcon16 = \Xmf\Module\Admin::iconUrl('', '16');
 
         if (empty($file_path)) {
             return false;
         }
-        if (null === $redirectFile) {
+        if ('' === $redirectFile) {
             $redirectFile = $_SERVER['SCRIPT_NAME'];
         }
         $moduleDirName      = \basename(\dirname(__DIR__, 2));
-        $moduleDirNameUpper = \mb_strtoupper($moduleDirName);
         if (null === $original_file_path) {
             if (self::fileExists($file_path)) {
                 $path_status = "<img src='$pathIcon16/1.png' >";
-                $path_status .= "$file_path (" . \constant('_CO_WGTEAMS_FC_AVAILABLE') . ') ';
+                $path_status .= "$file_path (" . \_CO_WGTEAMS_FC_AVAILABLE . ') ';
             } else {
                 $path_status = "<img src='$pathIcon16/0.png' >";
-                $path_status .= "$file_path (" . \constant('_CO_WGTEAMS_FC_NOTAVAILABLE') . ') ';
+                $path_status .= "$file_path (" . \_CO_WGTEAMS_FC_NOTAVAILABLE . ') ';
             }
         } else {
             if (self::compareFiles($file_path, $original_file_path)) {
                 $path_status = "<img src='$pathIcon16/1.png' >";
-                $path_status .= "$file_path (" . \constant('_CO_WGTEAMS_FC_AVAILABLE') . ') ';
+                $path_status .= "$file_path (" . \_CO_WGTEAMS_FC_AVAILABLE . ') ';
             } else {
                 $path_status = "<img src='$pathIcon16/0.png' >";
-                $path_status .= "$file_path (" . \constant('_CO_WGTEAMS_FC_NOTAVAILABLE') . ') ';
+                $path_status .= "$file_path (" . \_CO_WGTEAMS_FC_NOTAVAILABLE . ') ';
                 $path_status .= "<form action='" . $_SERVER['SCRIPT_NAME'] . "' method='post'>";
                 $path_status .= "<input type='hidden' name='op' value='copyfile'>";
                 $path_status .= "<input type='hidden' name='file_path' value='$file_path'>";
                 $path_status .= "<input type='hidden' name='original_file_path' value='$original_file_path'>";
                 $path_status .= "<input type='hidden' name='redirect' value='$redirectFile'>";
-                $path_status .= "<button class='submit' onClick='this.form.submit();'>" . \constant('_CO_WGTEAMS_FC_CREATETHEFILE') . '</button>';
+                $path_status .= "<button class='submit' onClick='this.form.submit();'>" . \_CO_WGTEAMS_FC_CREATETHEFILE . '</button>';
                 $path_status .= '</form>';
             }
         }
@@ -87,7 +87,7 @@ class FileChecker
      *
      * @return bool
      */
-    public static function copyFile($source_path, $destination_path)
+    public static function copyFile($source_path, $destination_path): bool
     {
         $source_path      = \str_replace('..', '', $source_path);
         $destination_path = \str_replace('..', '', $destination_path);
@@ -101,7 +101,7 @@ class FileChecker
      *
      * @return bool
      */
-    public static function compareFiles($file1_path, $file2_path)
+    public static function compareFiles($file1_path, $file2_path): bool
     {
         if (!self::fileExists($file1_path) || !self::fileExists($file2_path)) {
             return false;
@@ -123,7 +123,7 @@ class FileChecker
      *
      * @return bool
      */
-    public static function fileExists($file_path)
+    public static function fileExists($file_path): bool
     {
         return \is_file($file_path);
     }
@@ -134,27 +134,24 @@ class FileChecker
      *
      * @return bool
      */
-    public static function setFilePermissions($target, $mode = 0777)
+    public static function setFilePermissions($target, int $mode = 0777): bool
     {
         $target = \str_replace('..', '', $target);
 
-        return @\chmod($target, (int)$mode);
+        return @\chmod($target, $mode);
     }
 }
 
 $op = Request::getString('op', '', 'POST');
-switch ($op) {
-    case 'copyfile':
-        if (\Xmf\Request::hasVar('original_file_path', 'POST')) {
-            $original_file_path = $_POST['original_file_path'];
+if ($op == 'copyfile') {
+    if (!\Xmf\Request::hasVar('original_file_path', 'POST')
+        || !\Xmf\Request::hasVar('file_path', 'POST')
+        || !\Xmf\Request::hasVar('redirect', 'POST')) {
+            return;
         }
-        if (\Xmf\Request::hasVar('file_path', 'POST')) {
-            $file_path = $_POST['file_path'];
-        }
-        if (\Xmf\Request::hasVar('redirect', 'POST')) {
-            $redirect = $_POST['redirect'];
-        }
-        $msg = FileChecker::copyFile($original_file_path, $file_path) ? \constant('_CO_WGTEAMS_FC_FILECOPIED') : \constant('_CO_WGTEAMS_FC_FILENOTCOPIED');
-        \redirect_header($redirect, 2, $msg . ': ' . $file_path);
-        break;
+    $original_file_path = \Xmf\Request::getString('original_file_path');
+    $file_path = \Xmf\Request::getString('file_path');
+    $redirect =\Xmf\Request::getString('redirect');
+    $msg = FileChecker::copyFile($original_file_path, $file_path) ? \constant('_CO_WGTEAMS_FC_FILECOPIED') : \constant('_CO_WGTEAMS_FC_FILENOTCOPIED');
+    \redirect_header($redirect, 2, $msg . ': ' . $file_path);
 }
