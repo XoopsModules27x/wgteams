@@ -389,8 +389,8 @@ $modversion['config'][] = [
  */
 $modversion['config'][] = [
     'name'        => 'displaySampleButton',
-    'title'       => 'CO_' . $moduleDirNameUpper . '_' . 'SHOW_SAMPLE_BUTTON',
-    'description' => 'CO_' . $moduleDirNameUpper . '_' . 'SHOW_SAMPLE_BUTTON_DESC',
+    'title'       => '_CO_WGTEAMSSHOW_SAMPLE_BUTTON',
+    'description' => '_CO_WGTEAMSSHOW_SAMPLE_BUTTON_DESC',
     'formtype'    => 'yesno',
     'valuetype'   => 'int',
     'default'     => 1,
@@ -401,8 +401,8 @@ $modversion['config'][] = [
  */
 /* $modversion['config'][] = [
     'name'        => 'displayDeveloperTools',
-    'title'       => 'CO_' . $moduleDirNameUpper . '_' . 'SHOW_DEV_TOOLS',
-    'description' => 'CO_' . $moduleDirNameUpper . '_' . 'SHOW_DEV_TOOLS_DESC',
+    'title'       => '_CO_WGTEAMSSHOW_DEV_TOOLS',
+    'description' => '_CO_WGTEAMSSHOW_DEV_TOOLS_DESC',
     'formtype'    => 'yesno',
     'valuetype'   => 'int',
     'default'     => 0,

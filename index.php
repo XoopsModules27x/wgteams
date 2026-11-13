@@ -79,7 +79,7 @@ if ($teamsCount > 0) {
         $teams_list = wgteamsGetTeamDetails($teamsAll);
     }
 } else {
-    echo _MA_WGTEAMS_TEAMS_NODATA;
+    echo _MD_WGTEAMS_TEAMS_NODATA;
 }
 
 $team_name = '';
@@ -131,7 +131,7 @@ if (1 == $helper->getConfig('wgteams_showbreadcrumbs')) {
 wgteamsMetaKeywords($helper->getConfig('keywords') . ', ' . \implode(', ', $keywords));
 unset($keywords);
 // description
-wgteamsMetaDescription(_MA_WGTEAMS_TEAM_DESC);
+wgteamsMetaDescription(_MD_WGTEAMS_TEAM_DESC);
 
 $GLOBALS['xoopsTpl']->assign('wgteams_url_index', \WGTEAMS_URL . '/index.php');
 $GLOBALS['xoopsTpl']->assign('xoops_mpageurl', \WGTEAMS_URL . '/index.php');

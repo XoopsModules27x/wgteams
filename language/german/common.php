@@ -22,31 +22,31 @@ $moduleDirName = \basename(\dirname(__DIR__, 2));
 $moduleDirNameUpper = \mb_strtoupper($moduleDirName);
 
 // General
-\define('CO_' . $moduleDirNameUpper . '_' . 'CONFIRM', 'Bestätigen');
+\define('_CO_WGTEAMSCONFIRM', 'Bestätigen');
 //Sample Data
-\define('CO_' . $moduleDirNameUpper . '_' . 'ADD_SAMPLEDATA', 'Importe Beispieldaten (ALLE vorhandenen Daten werden gelöscht)');
-\define('CO_' . $moduleDirNameUpper . '_' . 'SAMPLEDATA_SUCCESS', 'Beispieldaten erfolgreich geladen');
-\define('CO_' . $moduleDirNameUpper . '_' . 'SAVE_SAMPLEDATA', 'Exportiere Tabellen nach YAML');
-\define('CO_' . $moduleDirNameUpper . '_' . 'SAVE_SAMPLEDATA_SUCCESS', 'Tabellen-Export nach YAML erfolgreich');
-\define('CO_' . $moduleDirNameUpper . '_' . 'SHOW_SAMPLE_BUTTON', 'Schaltfläche Import Beispieldaten anzeigen?');
-\define('CO_' . $moduleDirNameUpper . '_' . 'SHOW_SAMPLE_BUTTON_DESC', 'Falls Ja, dann wird die Schaltfläche "Importe Beispieldaten" im Adminbereich sichtbar. Diese Option ist nach der Installation standardmäßig aktiviert.');
-\define('CO_' . $moduleDirNameUpper . '_' . 'EXPORT_SCHEMA', 'Exportiere DB Schema nach YAML');
-\define('CO_' . $moduleDirNameUpper . '_' . 'EXPORT_SCHEMA_SUCCESS', 'Export DB Schema nach YAML erfolgreich abgeschlossen');
-\define('CO_' . $moduleDirNameUpper . '_' . 'EXPORT_SCHEMA_ERROR', 'Fehler: Export DB Schema nach YAML fehlgeschlagen');
-\define('CO_' . $moduleDirNameUpper . '_' . 'ADD_SAMPLEDATA_OK', 'Sind Sie sicher, Beispieldaten zu importieren? (ALLE vorhandenen Daten werden gelöscht)');
-\define('CO_' . $moduleDirNameUpper . '_' . 'HIDE_SAMPLEDATA_BUTTONS', 'Hide the Import buttons)');
-\define('CO_' . $moduleDirNameUpper . '_' . 'SHOW_SAMPLEDATA_BUTTONS', 'Show the Import buttons)');
+\define('_CO_WGTEAMSADD_SAMPLEDATA', 'Importe Beispieldaten (ALLE vorhandenen Daten werden gelöscht)');
+\define('_CO_WGTEAMSSAMPLEDATA_SUCCESS', 'Beispieldaten erfolgreich geladen');
+\define('_CO_WGTEAMSSAVE_SAMPLEDATA', 'Exportiere Tabellen nach YAML');
+\define('_CO_WGTEAMSSAVE_SAMPLEDATA_SUCCESS', 'Tabellen-Export nach YAML erfolgreich');
+\define('_CO_WGTEAMSSHOW_SAMPLE_BUTTON', 'Schaltfläche Import Beispieldaten anzeigen?');
+\define('_CO_WGTEAMSSHOW_SAMPLE_BUTTON_DESC', 'Falls Ja, dann wird die Schaltfläche "Importe Beispieldaten" im Adminbereich sichtbar. Diese Option ist nach der Installation standardmäßig aktiviert.');
+\define('_CO_WGTEAMSEXPORT_SCHEMA', 'Exportiere DB Schema nach YAML');
+\define('_CO_WGTEAMSEXPORT_SCHEMA_SUCCESS', 'Export DB Schema nach YAML erfolgreich abgeschlossen');
+\define('_CO_WGTEAMSEXPORT_SCHEMA_ERROR', 'Fehler: Export DB Schema nach YAML fehlgeschlagen');
+\define('_CO_WGTEAMSADD_SAMPLEDATA_OK', 'Sind Sie sicher, Beispieldaten zu importieren? (ALLE vorhandenen Daten werden gelöscht)');
+\define('_CO_WGTEAMSHIDE_SAMPLEDATA_BUTTONS', 'Hide the Import buttons)');
+\define('_CO_WGTEAMSSHOW_SAMPLEDATA_BUTTONS', 'Show the Import buttons)');
 
 //Menu
-\define('CO_' . $moduleDirNameUpper . '_' . 'ADMENU_MIGRATE', 'Migrate');
-\define('CO_' . $moduleDirNameUpper . '_' . 'FOLDER_YES', 'Folder "%s" exist');
-\define('CO_' . $moduleDirNameUpper . '_' . 'FOLDER_NO', 'Folder "%s" does not exist. Create the specified folder with CHMOD 777.');
-\define('CO_' . $moduleDirNameUpper . '_' . 'SHOW_DEV_TOOLS', 'Show Development Tools Button?');
-\define('CO_' . $moduleDirNameUpper . '_' . 'SHOW_DEV_TOOLS_DESC', 'If yes, the "Migrate" Tab and other Development tools will be visible to the Admin.');
+\define('_CO_WGTEAMSADMENU_MIGRATE', 'Migrate');
+\define('_CO_WGTEAMSFOLDER_YES', 'Folder "%s" exist');
+\define('_CO_WGTEAMSFOLDER_NO', 'Folder "%s" does not exist. Create the specified folder with CHMOD 777.');
+\define('_CO_WGTEAMSSHOW_DEV_TOOLS', 'Show Development Tools Button?');
+\define('_CO_WGTEAMSSHOW_DEV_TOOLS_DESC', 'If yes, the "Migrate" Tab and other Development tools will be visible to the Admin.');
 
 //Latest Version Check
-\define('CO_' . $moduleDirNameUpper . '_' . 'NEW_VERSION', 'Neue Version: ');
-\define('CO_' . $moduleDirNameUpper . '_' . 'ERROR_BAD_XOOPS', 'Sie benötigen mindestens Version %s (Ihre derzeitige Version ist %s)');
+\define('_CO_WGTEAMSNEW_VERSION', 'Neue Version: ');
+\define('_CO_WGTEAMSERROR_BAD_XOOPS', 'Sie benötigen mindestens Version %s (Ihre derzeitige Version ist %s)');
 
 // Admin link
-\define('_CO_' . $moduleDirNameUpper . '_ADMIN', 'Admininistration');
+\define('_CO_WGTEAMS_ADMIN', 'Admininistration');

@@ -108,7 +108,7 @@ function wgteamsGetTeamDetails(&$teamsAll, $lengthName = 0, $show_descr = true, 
             'team_image_url'  => $team_image_url,
             'team_tablestyle' => $team_tablestyle,
             'team_imagestyle' => $team_imagestyle,
-            'team_read_more'  => \_MA_WGTEAMS_READMORE,
+            'team_read_more'  => \_MD_WGTEAMS_READMORE,
             'show_teamname'   => $show_teamname,
         ];
     }
