@@ -23,23 +23,30 @@ declare(strict_types=1);
 
 use Xmf\Request;
 use XoopsModules\Wgteams;
+use XoopsModules\Wgteams\Common;
 
-require __DIR__ . '/header.php';
-// It recovered the value of argument op in URL$
-$op = Request::getString('op', 'list');
-// Request team_id
+require_once __DIR__ . '/header.php';
+
+$op     = Request::getString('op', 'list');
 $teamId = Request::getInt('team_id');
+$start  = Request::getInt('start');
+$limit  = Request::getInt('limit', $helper->getConfig('adminpager'));
+
+$GLOBALS['xoopsTpl']->assign('start', $start);
+$GLOBALS['xoopsTpl']->assign('limit', $limit);
+
 // Switch options
 switch ($op) {
     case 'list':
     default:
-        $GLOBALS['xoTheme']->addScript(\WGTEAMS_URL . '/assets/js/sortable-teams.js');
-        $start        = Request::getInt('start');
-        $limit        = Request::getInt('limit', $helper->getConfig('adminpager'));
+        $GLOBALS['xoopsTpl']->assign('wgteams_form_token', $GLOBALS['xoopsSecurity']->getTokenHTML());
+        $GLOBALS['xoopsTpl']->assign('wgteams_btn_token', $GLOBALS['xoopsSecurity']->createToken());
+
+        //$GLOBALS['xoTheme']->addScript(\WGTEAMS_URL . '/assets/js/sortable-teams.js');
         $templateMain = 'wgteams_admin_teams.tpl';
-        $GLOBALS['xoopsTpl']->assign('navigation', $adminObject->displayNavigation('teams.php'));
+        $GLOBALS['xoopsTpl']->assign('navigation', $adminObject->renderNavigation('teams.php'));
         $adminObject->addItemButton(_AM_WGTEAMS_TEAM_ADD, 'teams.php?op=new');
-        $GLOBALS['xoopsTpl']->assign('buttons', $adminObject->displayButton('left', ''));
+        $GLOBALS['xoopsTpl']->assign('buttons', $adminObject->renderButton('left', ''));
         $teamsCount = $teamsHandler->getCountTeams();
         $teamsAll   = $teamsHandler->getAllTeams($start, $limit);
         $GLOBALS['xoopsTpl']->assign('teams_count', $teamsCount);
@@ -55,7 +62,7 @@ switch ($op) {
                 } else {
                     $image = \WGTEAMS_UPLOAD_PATH . '/teams/images/' . $team['image'];
                     $team['image_resxy'] = '0 x 0';
-                    if (\file_exists($image)) {
+                    if (\file_exists($image) && is_file($image)) {
                         $size = \getimagesize($image);
                         $team['image_resxy'] = $size[0] . ' x ' . $size[1];
                     }
@@ -76,8 +83,15 @@ switch ($op) {
         }
         break;
     case 'set_onoff':
-        if (isset($teamId)) {
+        // Security Check
+        if (!$GLOBALS['xoopsSecurity']->check()) {
+            \redirect_header('teams.php', 3, \implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
+        }
+        if (isset($teamId) && $teamId > 0) {
             $teamsObj = $teamsHandler->get($teamId);
+            if (!\is_object($teamsObj)) {
+                \redirect_header('teams.php', 3, \_AM_WGTEAMS_INVALID_PARAM);
+            }
             // get Var team_online
             $team_online = (1 == $teamsObj->getVar('team_online')) ? '0' : '1';
             // Set Var team_online
@@ -92,8 +106,8 @@ switch ($op) {
     case 'new':
         $templateMain = 'wgteams_admin_teams.tpl';
         $adminObject->addItemButton(_AM_WGTEAMS_TEAMS_LIST, 'teams.php', 'list');
-        $GLOBALS['xoopsTpl']->assign('navigation', $adminObject->displayNavigation('teams.php'));
-        $GLOBALS['xoopsTpl']->assign('buttons', $adminObject->displayButton('left', ''));
+        $GLOBALS['xoopsTpl']->assign('navigation', $adminObject->renderNavigation('teams.php'));
+        $GLOBALS['xoopsTpl']->assign('buttons', $adminObject->renderButton('left', ''));
         // Get Form
         $teamsObj = $teamsHandler->create();
         $form     = $teamsObj->getFormTeams();
@@ -105,6 +119,9 @@ switch ($op) {
         }
         if (isset($teamId)) {
             $teamsObj = $teamsHandler->get($teamId);
+            if (!\is_object($teamsObj)) {
+                \redirect_header('teams.php', 3, \_AM_WGTEAMS_INVALID_PARAM);
+            }
         } else {
             $teamsObj = $teamsHandler->create();
         }
@@ -115,17 +132,18 @@ switch ($op) {
         $teamsObj->setVar('team_descr', Request::getText('team_descr'));
         // Set Var team_image
         require_once \XOOPS_ROOT_PATH . '/class/uploader.php';
+        $uploadFile0    = Request::getArray('xoops_upload_file')[0];
         $fileName       = $_FILES['attachedfile']['name'];
         $imageMimetype  = $_FILES['attachedfile']['type'];
         $uploaderErrors = '';
         $maxwidth  = $helper->getConfig('maxwidth');
         $maxheight = $helper->getConfig('maxheight');
         $uploader = new \XoopsMediaUploader(\WGTEAMS_UPLOAD_PATH . '/teams/images', $helper->getConfig('wgteams_img_mimetypes'), $helper->getConfig('wgteams_img_maxsize'), $maxwidth, $maxheight);
-        if ($uploader->fetchMedia($_POST['xoops_upload_file'][0])) {
+        if ($uploader->fetchMedia($uploadFile0)) {
             $extension = \preg_replace('/^.+\.([^.]+)$/sU', '', $fileName);
-            $imgName   = mb_substr(\str_replace(' ', '', $_POST['team_name']), 0, 20) . '_' . $extension;
+            $imgName   = mb_substr(\str_replace(' ', '', Request::getString('team_name')), 0, 20) . '_' . $extension;
             $uploader->setPrefix($imgName);
-            $uploader->fetchMedia($_POST['xoops_upload_file'][0]);
+            $uploader->fetchMedia($uploadFile0);
             if (!$uploader->upload()) {
                 $uploaderErrors = $uploader->getErrors();
             } else {
@@ -163,7 +181,7 @@ switch ($op) {
         // Set Var team_weight
         $teamsObj->setVar('team_weight', Request::getInt('team_weight'));
         // Set Var team_online
-        $teamsObj->setVar('team_online', (1 == Request::getInt('team_online', 0) ? 1 : 0));
+        $teamsObj->setVar('team_online', (1 == Request::getInt('team_online') ? 1 : 0));
         // Set Var team_submitter
         $teamsObj->setVar('team_submitter', Request::getInt('team_submitter'));
         // Set Var team_date_create
@@ -185,16 +203,25 @@ switch ($op) {
         $templateMain = 'wgteams_admin_teams.tpl';
         $adminObject->addItemButton(_AM_WGTEAMS_TEAM_ADD, 'teams.php?op=new');
         $adminObject->addItemButton(_AM_WGTEAMS_TEAMS_LIST, 'teams.php', 'list');
-        $GLOBALS['xoopsTpl']->assign('navigation', $adminObject->displayNavigation('teams.php'));
-        $GLOBALS['xoopsTpl']->assign('buttons', $adminObject->displayButton('left', ''));
+        $GLOBALS['xoopsTpl']->assign('navigation', $adminObject->renderNavigation('teams.php'));
+        $GLOBALS['xoopsTpl']->assign('buttons', $adminObject->renderButton('left', ''));
         // Get Form
         $teamsObj = $teamsHandler->get($teamId);
+        if (!\is_object($teamsObj)) {
+            \redirect_header('teams.php', 3, \_AM_WGTEAMS_INVALID_PARAM);
+        }
         $form     = $teamsObj->getFormTeams();
         $GLOBALS['xoopsTpl']->assign('form', $form->render());
         break;
     case 'delete':
         $teamsObj = $teamsHandler->get($teamId);
-        if (1 == Request::getInt('ok', 0)) {
+        if (!\is_object($teamsObj)) {
+            \redirect_header('teams.php', 3, \_AM_WGTEAMS_INVALID_PARAM);
+        }
+        $templateMain = 'wgteams_admin_teams.tpl';
+        $GLOBALS['xoopsTpl']->assign('navigation', $adminObject->renderNavigation('teams.php'));
+
+        if (1 == Request::getInt('ok')) {
             if (!$GLOBALS['xoopsSecurity']->check()) {
                 \redirect_header('teams.php', 3, \implode(', ', $GLOBALS['xoopsSecurity']->getErrors()));
             }
@@ -202,8 +229,11 @@ switch ($op) {
             $team_id  = $teamsObj->getVar('team_id');
             if ($teamsHandler->delete($teamsObj)) {
                 //delete team image
-                if ('' === !$team_img) {
-                    \unlink(\WGTEAMS_UPLOAD_PATH . '/teams/images/' . $team_img);
+                if ('' !== $team_img) {
+                    $img_path = \WGTEAMS_UPLOAD_PATH . '/teams/images/' . $team_img;
+                    if (\is_file($img_path)) {
+                        \unlink($img_path);
+                    }
                 }
                 //delete relations
                 $crit_rels = new \CriteriaCompo();
@@ -216,22 +246,35 @@ switch ($op) {
                         $relationsHandler->delete($relationsObj);
                     }
                 }
-                \redirect_header('teams.php', 3, _AM_WGTEAMS_FORM_DELETE_OK);
+                \redirect_header("teams.php?op=list&start=$start&limit=$limit", 3, _AM_WGTEAMS_FORM_DELETE_OK);
             } else {
                 $GLOBALS['xoopsTpl']->assign('error', $teamsObj->getHtmlErrors());
             }
         } else {
-            xoops_confirm(['ok' => 1, 'team_id' => $teamId, 'op' => 'delete'], $_SERVER['REQUEST_URI'], \sprintf(_AM_WGTEAMS_FORM_SURE_DELETE, $teamsObj->getVar('team_name')));
+            $customConfirm = new Common\Confirm(
+                ['ok' => 1, 'team_id' => $teamId, 'start' => $start, 'limit' => $limit, 'op' => 'delete'],
+                $_SERVER['REQUEST_URI'],
+                \sprintf(\_AM_WGTEAMS_FORM_SURE_DELETE, $teamsObj->getVar('team_name')));
+            $form = $customConfirm->getFormConfirm();
+            $GLOBALS['xoopsTpl']->assign('form', $form->render());
         }
         break;
     case 'order':
+        if (!$GLOBALS['xoopsSecurity']->check()) {
+            \redirect_header('teams.php', 3, \implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
+        }
         $torder = Request::getArray('torder');
         for ($i = 0, $iMax = \count($torder); $i < $iMax; $i++) {
             $teamsObj = $teamsHandler->get($torder[$i]);
-            $teamsObj->setVar('team_weight', $i + 1);
+            if (!\is_object($teamsObj)) {
+                \redirect_header('teams.php', 3, \_AM_WGTEAMS_INVALID_PARAM);
+            }
+            $teamsObj->setVar('team_weight', $start + $i + 1);
             $teamsHandler->insert($teamsObj);
         }
+        $GLOBALS['xoopsTpl']->assign('wgteams_form_token', $GLOBALS['xoopsSecurity']->getTokenHTML());
+        $GLOBALS['xoopsTpl']->assign('wgteams_btn_token', $GLOBALS['xoopsSecurity']->createToken());
         break;
 }
 
-require __DIR__ . '/footer.php';
+require_once __DIR__ . '/footer.php';

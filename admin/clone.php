@@ -21,7 +21,7 @@
 
 use Xmf\Request;
 
-require __DIR__ . '/header.php';
+require_once __DIR__ . '/header.php';
 // It recovered the value of argument op in URL$
 $op = Request::getString('op', 'list');
 
@@ -30,7 +30,7 @@ $templateMain = 'wgteams_admin_clone.tpl';
 switch ($op) {
     case 'list':
     default:
-        $GLOBALS['xoopsTpl']->assign('navigation', $adminObject->displayNavigation('clone.php'));
+        $GLOBALS['xoopsTpl']->assign('navigation', $adminObject->renderNavigation('clone.php'));
         require_once $GLOBALS['xoops']->path('class/xoopsformloader.php');
         $form  = new \XoopsThemeForm(\sprintf(\_AM_WGTEAMS_CLONE_TITLE, $helper->getModule()->getVar('name', 'E')), 'clone', 'clone.php', 'post', true);
         $clone = new \XoopsFormText(\_AM_WGTEAMS_CLONE_NAME, 'clone', 20, 20, '');
@@ -88,13 +88,13 @@ switch ($op) {
         $GLOBALS['xoopsTpl']->assign('result', $msg);
         break;
 }
-require __DIR__ . '/footer.php';
+require_once __DIR__ . '/footer.php';
 
 // recursive cloning script
 /**
  * @param $path
  */
-function cloneFileFolder($path)
+function cloneFileFolder($path): void
 {
     global $patKeys;
     global $patValuess;
@@ -113,7 +113,7 @@ function cloneFileFolder($path)
         if ($handle) {
             while (false !== ($file = \readdir($handle))) {
                 if (0 !== \mb_strpos($file, '.')) {
-                    cloneFileFolder("{$path}/{$file}");
+                    cloneFileFolder("$path/$file");
                 }
             }
             \closedir($handle);
@@ -137,7 +137,7 @@ function cloneFileFolder($path)
  *
  * @return bool
  */
-function createLogo($dirname)
+function createLogo($dirname): bool
 {
     if (!\extension_loaded('gd')) {
         return false;
@@ -152,10 +152,8 @@ function createLogo($dirname)
         'imagealphablending',
         'imagesavealpha',
     ];
-    foreach ($requiredFunctions as $func) {
-        if (!\function_exists($func)) {
-            return false;
-        }
+    if (array_any($requiredFunctions, fn($func) => !\function_exists($func))) {
+        return false;
     }
     //            unset($func);
 
@@ -176,7 +174,7 @@ function createLogo($dirname)
     // Write text
     $textColor     = \imagecolorallocate($imageModule, 0, 0, 0);
     $spaceToBorder = (int)((80 - \mb_strlen($dirname) * 6.5) / 2);
-    \imagefttext($imageModule, 8.5, 0, $spaceToBorder, 45, $textColor, $font, \ucfirst($dirname), []);
+    \imagefttext($imageModule, 8.5, 0, $spaceToBorder, 45, $textColor, $font, \ucfirst($dirname));
 
     // Set transparency color
     //$white = imagecolorallocatealpha($imageModule, 255, 255, 255, 127);
@@ -184,7 +182,6 @@ function createLogo($dirname)
     //imagecolortransparent($imageModule, $white);
 
     \imagepng($imageModule, $GLOBALS['xoops']->path('modules/' . $dirname . '/assets/images/logoModule.png'));
-    \imagedestroy($imageModule);
 
     return true;
 }

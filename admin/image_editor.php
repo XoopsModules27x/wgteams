@@ -25,10 +25,8 @@ use Xmf\Request;
 use XoopsModules\Wgteams;
 use XoopsModules\Wgteams\Constants;
 
-include __DIR__ . '/header.php';
-$GLOBALS['xoopsOption']['template_main'] = 'wgteams_admin_image_editor.tpl';
-
-require_once \XOOPS_ROOT_PATH . '/header.php';
+include_once __DIR__ . '/header.php';
+$templateMain = 'wgteams_admin_image_editor.tpl';
 
 $utility = new \XoopsModules\Wgteams\Utility();
 
@@ -50,12 +48,12 @@ if ('team_id' === $origin) {
     $teamId = Request::getInt('imageIdCrop');
 }
 if ( 0 < $memberId ) {
-    $imageClass   = Constants::IMAGECLASS_MEMBER;
+    $imageClass = Constants::IMAGECLASS_MEMBER;
 } else {
     if ($teamId > 0) {
-        $imageClass   = Constants::IMAGECLASS_TEAM;
+        $imageClass = Constants::IMAGECLASS_TEAM;
     } else {
-        \redirect_header('index.php', 3, _AM_WGTEAMS_FORM_ERROR_INVALID_ID);
+        \redirect_header('index.php', 3, \_AM_WGTEAMS_FORM_ERROR_INVALID_ID);
     }
 }
 
@@ -63,32 +61,40 @@ if ($imageClass === Constants::IMAGECLASS_MEMBER) {
     $imageId      = $memberId;
     $imageHandler = $membersHandler;
     $imageObj     = $membersHandler->get($imageId);
+    if (!\is_object($imageObj)) {
+        \redirect_header('members.php', 3, \_AM_WGTEAMS_INVALID_PARAM);
+    }
     $imageOrigin  = 'member_id';
-    $imgName  = mb_substr(\str_replace(' ', '', $imageObj->getVar('member_lastname') . $imageObj->getVar('member_firstname')), 0, 20) . '.jpg';
-    $imageDir = '/uploads/wgteams/members/images/';
-    $imgPath  = \XOOPS_ROOT_PATH . $imageDir;
-    $imgUrl   = \XOOPS_URL . $imageDir;
-    $imgFinal = $imgPath . $imgName;
-    $imgTemp  = \WGTEAMS_UPLOAD_PATH . '/temp/' . $imgName;
-    $redir    = 'members.php?op=list&amp;start=' . $start . '&amp;limit=' . $limit;
-    $nameObj  = 'member_firstname';
-    $fieldObj = 'member_image';
-    $submObj  = 'member_submitter';
+    $imgName      = mb_substr(\str_replace(' ', '', $imageObj->getVar('member_lastname') . $imageObj->getVar('member_firstname')), 0, 20) . '.jpg';
+    $imageDir     = '/uploads/wgteams/members/images/';
+    $imgPath      = \XOOPS_ROOT_PATH . $imageDir;
+    $imgUrl       = \XOOPS_URL . $imageDir;
+    $imgFinal     = $imgPath . $imgName;
+    $imgTemp      = \WGTEAMS_UPLOAD_PATH . '/temp/' . $imgName;
+    $redir        = 'members.php?op=list&start=' . $start . '&limit=' . $limit;
+    $nameObj      = 'member_firstname';
+    $fieldObj     = 'member_image';
+    $submObj      = 'member_submitter';
+    $imageInfo    = \sprintf(\_AM_WGTEAMS_IMG_EDITOR_MEMBER, $imageObj->getVar('member_firstname') . ' ' . $imageObj->getVar('member_lastname'));
 } else {
     $imageId      = $teamId;
     $imageObj     = $teamsHandler->get($imageId);
+    if (!\is_object($imageObj)) {
+        \redirect_header('teams.php', 3, \_AM_WGTEAMS_INVALID_PARAM);
+    }
     $imageHandler = $teamsHandler;
     $imageOrigin  = 'team_id';
-    $imgName  = mb_substr(\str_replace(' ', '', $imageObj->getVar('team_name')), 0, 20) . '.jpg';
-    $imageDir = '/uploads/wgteams/teams/images/';
-    $imgPath  = \XOOPS_ROOT_PATH . $imageDir;
-    $imgUrl   = \XOOPS_URL . $imageDir;
-    $imgFinal = $imgPath . $imgName;
-    $imgTemp  = \WGTEAMS_UPLOAD_PATH . '/temp/' . $imgName;
-    $redir    = 'teams.php?op=list&amp;start=' . $start . '&amp;limit=' . $limit;
-    $nameObj  = 'team_name';
-    $fieldObj = 'team_image';
-    $submObj  = 'team_submitter';
+    $imgName      = mb_substr(\str_replace(' ', '', $imageObj->getVar('team_name')), 0, 20) . '.jpg';
+    $imageDir     = '/uploads/wgteams/teams/images/';
+    $imgPath      = \XOOPS_ROOT_PATH . $imageDir;
+    $imgUrl       = \XOOPS_URL . $imageDir;
+    $imgFinal     = $imgPath . $imgName;
+    $imgTemp      = \WGTEAMS_UPLOAD_PATH . '/temp/' . $imgName;
+    $redir        = 'teams.php?op=list&start=' . $start . '&limit=' . $limit;
+    $nameObj      = 'team_name';
+    $fieldObj     = 'team_image';
+    $submObj      = 'team_submitter';
+    $imageInfo    = \sprintf(\_AM_WGTEAMS_IMG_EDITOR_TEAM, $imageObj->getVar('team_name'));
 }
 
 $imgCurrent['img_name'] = $imageObj->getVar($fieldObj);
@@ -115,6 +121,9 @@ foreach ($image_array as $image_img) {
 $GLOBALS['xoopsTpl']->assign('images', $images);
 unset($images);
 // end: get all objects/classes/vars needed for image editor
+if ('blank.gif' !== $imageObj->getVar($fieldObj)) {
+    $GLOBALS['xoopsTpl']->assign('no_blank', true);
+}
 
 $uid = $xoopsUser instanceof \XoopsUser ? $xoopsUser->id() : 0;
 
@@ -134,20 +143,32 @@ $GLOBALS['xoopsTpl']->assign('gridtarget', $imgName);
 $GLOBALS['xoopsTpl']->assign('imgCurrent', $imgCurrent);
 $GLOBALS['xoopsTpl']->assign('imageId', $imageId);
 $GLOBALS['xoopsTpl']->assign('imageOrigin', $imageOrigin);
+$GLOBALS['xoopsTpl']->assign('image_info', $imageInfo);
+$GLOBALS['xoopsTpl']->assign('start', $start);
+$GLOBALS['xoopsTpl']->assign('limit', $limit);
+// create XOOPS tokens
+$GLOBALS['xoopsTpl']->assign('wgteams_form_token', $GLOBALS['xoopsSecurity']->getTokenHTML());
+$GLOBALS['xoopsTpl']->assign('wgteams_btn_token', $GLOBALS['xoopsSecurity']->createToken());
 
 // Breadcrumbs
 $GLOBALS['xoopsTpl']->assign('show_breadcrumbs', $helper->getConfig('show_breadcrumbs'));
-$xoBreadcrumbs[] = ['title' => _AM_WGTEAMS_IMG_EDITOR];
+$xoBreadcrumbs[] = ['title' => \_AM_WGTEAMS_IMG_EDITOR];
 
 // get config for images
-$maxwidth  = $helper->getConfig('maxwidth_imgeditor');
-$maxheight = $helper->getConfig('maxheight_imgeditor');
-$maxsize   = $helper->getConfig('wgteams_img_maxsize');
+$maxwidth  = (int)$helper->getConfig('maxwidth_imgeditor');
+$maxheight = (int)$helper->getConfig('maxheight_imgeditor');
+$maxsize   = (int)$helper->getConfig('wgteams_img_maxsize');
+if (0 == $maxwidth || 0 == $maxheight || 0 == $maxsize) {
+    \redirect_header($redir, 3, \_AM_WGTEAMS_INVALID_PARAM_IMG);
+}
 $mimetypes = $helper->getConfig('wgteams_img_mimetypes');
 
 switch ($op) {
 
     case 'creategrid':
+        if (!$GLOBALS['xoopsSecurity']->check()) {
+            \redirect_header('index.php', 3, \implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
+        }
         // create an image grid based on given sources
         $type   = Request::getInt('type', 4);
         $src[1] = Request::getString('src1');
@@ -157,14 +178,7 @@ switch ($op) {
         $src[5] = Request::getString('src5');
         $src[6] = Request::getString('src6');
         $target = Request::getString('target');
-        // replace thumbs dir by dir for medium images, only for wggallery
-        // $src[1] = \str_replace('/thumbs/', '/medium/', $src[1]);
-        // $src[2] = \str_replace('/thumbs/', '/medium/', $src[2]);
-        // $src[3] = \str_replace('/thumbs/', '/medium/', $src[3]);
-        // $src[4] = \str_replace('/thumbs/', '/medium/', $src[4]);
-        // $src[5] = \str_replace('/thumbs/', '/medium/', $src[5]);
-        // $src[6] = \str_replace('/thumbs/', '/medium/', $src[6]);
-        
+
         $images = [];
         for ($i = 1; $i <= 6; $i++) {
             if ('' !== $src[$i]) {
@@ -179,16 +193,19 @@ switch ($op) {
         imagefilledrectangle($tmp, 0, 0, $maxwidth, $maxheight, $imgBg);
 
         $final = XOOPS_UPLOAD_PATH . '/wgteams/temp/' . $target;
-        \unlink($final);
+        if (\is_file($final)) {
+            \unlink($final);
+        }
         \imagejpeg($tmp, $final);
-        \imagedestroy($tmp);
 
         $imgTemp = XOOPS_UPLOAD_PATH . '/wgteams/temp/' . $uid . 'imgTemp';
 
         $imgHandler = new Wgteams\Resizer();
         if (4 === $type) {
             for ($i = 1; $i <= 4; $i++) {
-                \unlink($imgTemp . $i . '.jpg');
+                if (\is_file($imgTemp . $i . '.jpg')) {
+                    \unlink($imgTemp . $i . '.jpg');
+                }
                 $imgHandler->sourceFile    = $images[$i]['file'];
                 $imgHandler->endFile       = $imgTemp . $i . '.jpg';
                 $imgHandler->imageMimetype = $images[$i]['mimetype'];
@@ -205,7 +222,9 @@ switch ($op) {
                 $imgHandler->sourceFile = $imgTemp . $i . '.jpg';
                 $imgHandler->mergePos   = $i;
                 $imgHandler->mergeImage();
-                \unlink($imgTemp . $i . '.jpg');
+                if (\is_file($imgTemp . $i . '.jpg')) {
+                    \unlink($imgTemp . $i . '.jpg');
+                }
             }
         }
         if (6 === $type) {
@@ -225,12 +244,18 @@ switch ($op) {
                 $imgHandler->sourceFile = $imgTemp . $i . '.jpg';
                 $imgHandler->mergePos   = $i;
                 $imgHandler->mergeImage();
-                \unlink($imgTemp . $i . '.jpg');
+                if (\is_file($imgTemp . $i . '.jpg')) {
+                    \unlink($imgTemp . $i . '.jpg');
+                }
             }
         }
         break; 
 
     case 'cropimage':
+        // Security Check
+        if (!$GLOBALS['xoopsSecurity']->check()) {
+            \redirect_header('index.php', 3, \implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
+        }
         // save base64_image and resize to maxwidth/maxheight
         $base64_image_content = Request::getString('croppedImage');
         if (\preg_match('/^(data:\s*image\/(\w+);base64,)/', $base64_image_content, $result)) {
@@ -246,10 +271,13 @@ switch ($op) {
         $imgHandler->maxHeight     = $maxheight;
         $ret                       = $imgHandler->resizeImage();
 
-        //\unlink($imgFinal);
         break;
     case 'saveImageSelected':
         // save image selected from list of available images in upload folder
+        // Security Check
+        if (!$GLOBALS['xoopsSecurity']->check()) {
+            \redirect_header('index.php', 3, \implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
+        }
         // Set Vars
         $image_id = Request::getString('image_id');
         // remove '_image' from id
@@ -258,13 +286,17 @@ switch ($op) {
         $imageObj->setVar($submObj, $uid);
         // Insert Data
         if ($imageHandler->insert($imageObj)) {  
-            \redirect_header($redir, 2, _AM_WGTEAMS_FORM_OK);
+            \redirect_header($redir, 2, \_AM_WGTEAMS_FORM_OK);
         }
         $GLOBALS['xoopsTpl']->assign('error', $imageObj->getHtmlErrors());
         break;
         
     case 'saveGrid':
         // save before created grid image
+        // Security Check
+        if (!$GLOBALS['xoopsSecurity']->check()) {
+            \redirect_header('index.php', 3, \implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
+        }
         $imgTempGrid = Request::getString('gridImgFinal');
         $ret = \rename($imgTempGrid, $imgFinal);
         // Set Vars
@@ -272,21 +304,27 @@ switch ($op) {
         $imageObj->setVar($submObj, $uid);
         // Insert Data
         if ($imageHandler->insert($imageObj)) {
-            \redirect_header($redir, 2, _AM_WGTEAMS_FORM_OK);
+            \redirect_header($redir, 2, \_AM_WGTEAMS_FORM_OK);
         }
         $GLOBALS['xoopsTpl']->assign('error', $imageObj->getHtmlErrors());
 
         break;
     case 'saveCrop':
         // save before created cropped image
-        \unlink($imgFinal);
+        // Security Check
+        if (!$GLOBALS['xoopsSecurity']->check()) {
+            \redirect_header('index.php', 3, \implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
+        }
+        if (\is_file($imgFinal)) {
+            \unlink($imgFinal);
+        }
         $ret = \rename($imgTemp, $imgFinal);
         // Set Vars
         $imageObj->setVar($fieldObj, $imgName);
         $imageObj->setVar($submObj, $uid);
         // Insert Data
         if ($imageHandler->insert($imageObj, true)) {
-            \redirect_header($redir, 2, _AM_WGTEAMS_FORM_OK);
+            \redirect_header($redir, 2, \_AM_WGTEAMS_FORM_OK);
         }
         $GLOBALS['xoopsTpl']->assign('error', $imageObj->getHtmlErrors());
 
@@ -298,17 +336,17 @@ switch ($op) {
         }
         // Set Vars
         require_once \XOOPS_ROOT_PATH . '/class/uploader.php';
+        $uploadFile0    = Request::getArray('xoops_upload_file')[0];
         $fileName       = $_FILES['attachedfile']['name'];
         $imageMimetype  = $_FILES['attachedfile']['type'];
         $uploaderErrors = '';
         $maxwidth  = $helper->getConfig('maxwidth');
         $maxheight = $helper->getConfig('maxheight');
         $uploader       = new \XoopsMediaUploader($imgPath, $mimetypes, $maxsize, $maxwidth, $maxheight);
-        if ($uploader->fetchMedia($_POST['xoops_upload_file'][0])) {
+        if ($uploader->fetchMedia($uploadFile0)) {
             $extension = \preg_replace('/^.+\.([^.]+)$/sU', '', $fileName);
             $imgName   .= '.' . $extension;
             $uploader->setPrefix($imgName);
-            $uploader->fetchMedia($_POST['xoops_upload_file'][0]);
             if (!$uploader->upload()) {
                 $uploaderErrors = $uploader->getErrors();
             } else {
@@ -340,7 +378,7 @@ switch ($op) {
         }
         // Insert Data
         if ($imageHandler->insert($imageObj)) {
-            \redirect_header($redir, 2, _AM_WGTEAMS_FORM_OK);
+            \redirect_header($redir, 2, \_AM_WGTEAMS_FORM_OK);
         }
         // Get Form
         $GLOBALS['xoopsTpl']->assign('error', $imageObj->getHtmlErrors());
@@ -351,8 +389,6 @@ switch ($op) {
     case 'imghandler':
     default:
         $GLOBALS['xoTheme']->addStylesheet(\WGTEAMS_URL . '/assets/css/cropper.min.css');
-        $GLOBALS['xoTheme']->addScript(\WGTEAMS_URL . '/assets/js/cropper.min.js');
-        $GLOBALS['xoTheme']->addScript(\WGTEAMS_URL . '/assets/js/cropper-main.js');
 
         $GLOBALS['xoopsTpl']->assign('nbModals', [1, 2, 3, 4, 5, 6]);
         
@@ -364,7 +400,7 @@ switch ($op) {
         $image_path = $imgPath . $currImage;
         $width = 0;
         $height= 0;
-        if (\file_exists($image_path)) {
+        if (\file_exists($image_path) && is_file($image_path)) {
             // get size of current album image
             [$width, $height, $type, $attr] = \getimagesize($image_path);
         }
@@ -385,7 +421,7 @@ $GLOBALS['xoopsTpl']->assign('panel_type', $helper->getConfig('panel_type'));
 // Description
 // $utility::getMetaDescription(_AM_WGTEAMS_ALBUMS);
 
-include __DIR__ . '/footer.php';
+include_once __DIR__ . '/footer.php';
 
 /**
  * @public function getFormUploadAlbumimage:
@@ -394,7 +430,7 @@ include __DIR__ . '/footer.php';
  * @param $imageId
  * @return \XoopsThemeForm
  */
-function getFormUploadImage($imageOrigin, $imageId)
+function getFormUploadImage($imageOrigin, $imageId): XoopsThemeForm
 {
     $helper = \XoopsModules\Wgteams\Helper::getInstance();
     // Get Theme Form
@@ -407,14 +443,14 @@ function getFormUploadImage($imageOrigin, $imageId)
     $imageTray1->addElement($imageFileSelect);
     $form->addElement($imageTray1);
     
-    $cond = _MI_WGTEAMS_IMG_MAXSIZE . ': ' . ($helper->getConfig('wgteams_img_maxsize') / 1048576) . ' ' . _MI_WGTEAMS_SIZE_MB . '<br>';
-    $cond .= _MI_WGTEAMS_MAXWIDTH . ': ' . $helper->getConfig('maxwidth') . ' px<br>';
-    $cond .= _MI_WGTEAMS_MAXHEIGHT . ': ' . $helper->getConfig('maxheight') . ' px<br>';
-    $cond .= _MI_WGTEAMS_IMG_MIMETYPES . ': ' . \implode(', ', $helper->getConfig('wgteams_img_mimetypes')) . '<br>';
+    $cond = \_AM_WGTEAMS_IMG_MAXSIZE . ': ' . ($helper->getConfig('wgteams_img_maxsize') / 1048576) . ' ' . \_AM_WGTEAMS_SIZE_MB . '<br>';
+    $cond .= \_AM_WGTEAMS_MIMETYPES . ': ' . $helper->getConfig('maxwidth') . ' px<br>';
+    $cond .= \_AM_WGTEAMS_MAXHEIGHT . ': ' . $helper->getConfig('maxheight') . ' px<br>';
+    $cond .= \_AM_WGTEAMS_MIMETYPES . ': ' . \implode(', ', $helper->getConfig('wgteams_img_mimetypes')) . '<br>';
     $form->addElement(new \XoopsFormLabel(_AM_WGTEAMS_IMG_EDITOR_UPLOAD, $cond));
       
     $imageTray3      = new \XoopsFormElementTray(_AM_WGTEAMS_IMG_EDITOR_RESIZE, '');
-    $resizeinfo = \str_replace('%w', (string)$helper->getConfig('maxwidth_imgeditor'), _AM_WGTEAMS_IMG_EDITOR_RESIZE_DESC);
+    $resizeinfo = \str_replace('%w', (string)$helper->getConfig('maxwidth_imgeditor'), \_AM_WGTEAMS_IMG_EDITOR_RESIZE_DESC);
     $resizeinfo = \str_replace('%h', (string)$helper->getConfig('maxheight_imgeditor'), $resizeinfo);
     $imageTray3->addElement(new \XoopsFormLabel($resizeinfo, ''));
     $imageTray3->addElement(new \XoopsFormRadioYN('', 'img_resize', 1));

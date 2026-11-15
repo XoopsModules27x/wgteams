@@ -9,7 +9,7 @@
                 <th class="center"><{$smarty.const._AM_WGTEAMS_INFOFIELD_CLASS}></th>
                 <th class="center"><{$smarty.const._AM_WGTEAMS_SUBMITTER}></th>
                 <th class="center"><{$smarty.const._AM_WGTEAMS_DATE_CREATE}></th>
-                <th class="center width5"><{$smarty.const._AM_WGTEAMS_FORM_ACTION}></th>
+                <th class="center width-action"><{$smarty.const._AM_WGTEAMS_FORM_ACTION}></th>
             </tr>
         </thead>
         <{if $infofields_count|default:0 > 0}>
@@ -21,9 +21,9 @@
                     <td class="center"><{$infofield.field_class_text|default:false}></td>
                     <td class="center"><{$infofield.field_submitter}></td>
                     <td class="center"><{$infofield.field_date_created}></td>
-                    <td class="center  width5">
-                    <a href="infofields.php?op=edit&amp;infofield_id=<{$infofield.field_id}>" title="<{$smarty.const._EDIT}>"><img src="<{xoModuleIcons16 'edit.png'}>" alt="infofields"></a>
-                    <a href="infofields.php?op=delete&amp;infofield_id=<{$infofield.field_id}>" title="<{$smarty.const._DELETE}>"><img src="<{xoModuleIcons16 'delete.png'}>" alt="infofields"></a>
+                    <td class="center width-action xo-buttons">
+                        <a href="infofields.php?op=edit&infofield_id=<{$infofield.field_id}>&start=<{$start}>&limit=<{$limit}>" title="<{$smarty.const._EDIT}>"><i class="fa fa-edit"></i></a>
+                    <a href="infofields.php?op=delete&infofield_id=<{$infofield.field_id}>&start=<{$start}>&limit=<{$limit}>" title="<{$smarty.const._DELETE}>"><i class="fa fa-trash"></i></a>
                     </td>
                 </tr>
                 <{/foreach}>
@@ -35,9 +35,11 @@
         <div class="xo-pagenav floatright"><{$pagenav}></div><div class="clear spacer"></div>
     <{/if}>
 <{/if}>
+
 <{if $form|default:false}>
     <{$form}>
 <{/if}>
+
 <{if $error|default:false}>
     <div class="errorMsg"><strong><{$error}></strong></div>
 <{/if}>

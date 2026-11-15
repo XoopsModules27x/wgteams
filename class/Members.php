@@ -71,7 +71,7 @@ class Members extends \XoopsObject
      * @param mixed $action
      * @return \XoopsThemeForm
      */
-    public function getFormMembers($action = false)
+    public function getFormMembers($action = false): \XoopsThemeForm
     {
         global $xoopsUser;
 
@@ -79,7 +79,7 @@ class Members extends \XoopsObject
             $action = $_SERVER['REQUEST_URI'];
         }
         // Title
-        $title = $this->isNew() ? \sprintf(_AM_WGTEAMS_MEMBER_ADD) : \sprintf(_AM_WGTEAMS_MEMBER_EDIT);
+        $title = $this->isNew() ? _AM_WGTEAMS_MEMBER_ADD : _AM_WGTEAMS_MEMBER_EDIT;
         // Get Theme Form
         \xoops_load('XoopsFormLoader');
         $form = new \XoopsThemeForm($title, 'form', $action, 'post', true);
@@ -124,7 +124,7 @@ class Members extends \XoopsObject
             $imageSelect->addOption($image, $image);
         }
         $imageSelect->setExtra("onchange='showImgSelected(\"image2\", \"member_image\", \"" . $imageDirectory . '", "", "' . \XOOPS_URL . "\")'");
-        $imageTray->addElement($imageSelect, false);
+        $imageTray->addElement($imageSelect);
         $imageTray->addElement(new \XoopsFormLabel('', "<br><img src='" . \XOOPS_URL . '/' . $imageDirectory . '/' . $memberImage . "' name='image2' id='image2' alt='' style='max-width:100px;' />"));
         // Form File
         $fileSelectTray = new \XoopsFormElementTray('', '<br>');
@@ -159,12 +159,12 @@ class Members extends \XoopsObject
 
     /**
      * Get Values
-     * @param null $keys
-     * @param null $format
-     * @param null $maxDepth
+     * @param $keys
+     * @param $format
+     * @param $maxDepth
      * @return array
      */
-    public function getValuesMember($keys = null, $format = null, $maxDepth = null)
+    public function getValuesMember($keys = null, $format = null, $maxDepth = null): array
     {
         $helper             = Helper::getInstance();
         $ret                = $this->getValues($keys, $format, $maxDepth);
@@ -187,7 +187,7 @@ class Members extends \XoopsObject
      *
      * @return array
      **/
-    public function toArray()
+    public function toArray(): array
     {
         $ret  = [];
         $vars = &$this->getVars();

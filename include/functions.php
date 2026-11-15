@@ -26,6 +26,8 @@ declare(strict_types=1);
  * @return mixed|string
  */
 
+defined('XOOPS_ROOT_PATH') || exit('Restricted access');
+
 use XoopsModules\Wgteams\{
     //Constants,
     Helper
@@ -34,7 +36,7 @@ use XoopsModules\Wgteams\{
 /**
  * @param $content
  */
-function wgteamsMetaKeywords($content)
+function wgteamsMetaKeywords($content): void
 {
     global $xoopsTpl, $xoTheme;
     $myts    = \MyTextSanitizer::getInstance();
@@ -49,7 +51,7 @@ function wgteamsMetaKeywords($content)
 /**
  * @param $content
  */
-function wgteamsMetaDescription($content)
+function wgteamsMetaDescription($content): void
 {
     global $xoopsTpl, $xoTheme;
     $myts    = \MyTextSanitizer::getInstance();
@@ -68,7 +70,7 @@ function wgteamsMetaDescription($content)
  * @param int $lengthDescr
  * @return array
  */
-function wgteamsGetTeamDetails(&$teamsAll, $lengthName = 0, $show_descr = true, $lengthDescr = 0)
+function wgteamsGetTeamDetails($teamsAll, int $lengthName = 0, bool $show_descr = true, int $lengthDescr = 0): array
 {
     $helper = Helper::getInstance();
 
@@ -122,8 +124,9 @@ function wgteamsGetTeamDetails(&$teamsAll, $lengthName = 0, $show_descr = true, 
  * @param int $lenghtName
  * @param int $lengthDescr
  * @return array
+ * @throws Exception
  */
-function wgteamsGetTeamMemberDetails(&$teamsAll, $rel_id = 0, $lenghtName = 0, $lengthDescr = 0)
+function wgteamsGetTeamMemberDetails($teamsAll, int $rel_id = 0, int $lenghtName = 0, int $lengthDescr = 0): array
 {
     // Get teams and member relations
     $helper            = Helper::getInstance();

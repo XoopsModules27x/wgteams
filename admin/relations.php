@@ -22,27 +22,34 @@ declare(strict_types=1);
  */
 
 use Xmf\Request;
+use XoopsModules\Wgteams\Common;
 
-require __DIR__ . '/header.php';
+require_once __DIR__ . '/header.php';
 // It recovered the value of argument op in URL$
 $op     = Request::getString('op', 'list');
 $relId  = Request::getInt('rel_id');
 $teamId = Request::getInt('team_id');
 $sortby = Request::getString('sortby', 'rel_weight');
 $order  = Request::getString('order', 'asc');
+$start  = Request::getInt('start');
+$limit  = Request::getInt('limit', $helper->getConfig('adminpager'));
+
+$GLOBALS['xoopsTpl']->assign('start', $start);
+$GLOBALS['xoopsTpl']->assign('limit', $limit);
+
 // Switch options
 switch ($op) {
     case 'list':
     default:
-        $GLOBALS['xoTheme']->addScript(\WGTEAMS_URL . '/assets/js/sortable-relations.js');
-        $start        = Request::getInt('start');
-        $limit        = Request::getInt('limit', $helper->getConfig('adminpager'));
+        $GLOBALS['xoopsTpl']->assign('wgteams_form_token', $GLOBALS['xoopsSecurity']->getTokenHTML());
+        $GLOBALS['xoopsTpl']->assign('wgteams_btn_token', $GLOBALS['xoopsSecurity']->createToken());
+
         $templateMain = 'wgteams_admin_relations.tpl';
-        $GLOBALS['xoopsTpl']->assign('navigation', $adminObject->displayNavigation('relations.php'));
-        $adminObject->addItemButton(_AM_WGTEAMS_RELATION_ADD, 'relations.php?op=new&amp;team_id=' . $teamId);
-        $GLOBALS['xoopsTpl']->assign('buttons', $adminObject->displayButton('left', ''));
+        $GLOBALS['xoopsTpl']->assign('navigation', $adminObject->renderNavigation('relations.php'));
+        $adminObject->addItemButton(_AM_WGTEAMS_RELATION_ADD, 'relations.php?op=new&team_id=' . $teamId);
+        $GLOBALS['xoopsTpl']->assign('buttons', $adminObject->renderButton('left', ''));
         if (0 === $teamId) {
-            $teamsCount = (int)$teamsHandler->getCountTeams();
+            $teamsCount = $teamsHandler->getCountTeams();
             if (1 === $teamsCount) {
                 // if only one team is available, then immediately preselect this team
                 $teamsAll = $teamsHandler->getAllTeams();
@@ -54,6 +61,7 @@ switch ($op) {
         $form = getFormFilterTeam($teamId, $start, $limit);
         $GLOBALS['xoopsTpl']->assign('form', $form->render());
         $crRelations = new \CriteriaCompo();
+        $relationsCountTotal = $relationsHandler->getCount($crRelations);
         $crRelations->add(new \Criteria('rel_team_id', $teamId));  
         $relationsCount = $relationsHandler->getCount($crRelations);
         $crRelations->setSort($sortby);
@@ -86,22 +94,16 @@ switch ($op) {
             }
             if ($relationsCount > $limit) {
                 require_once \XOOPS_ROOT_PATH . '/class/pagenav.php';
-                $pagenav = new \XoopsPageNav($relationsCount, $limit, $start, 'start', 'op=list&amp;limit=' . $limit . '&amp;team_id=' . $teamId);
+                $pagenav = new \XoopsPageNav($relationsCount, $limit, $start, 'start', 'op=list&limit=' . $limit . '&team_id=' . $teamId);
                 $GLOBALS['xoopsTpl']->assign('pagenav', $pagenav->renderNav());
-            }
-        } else {
-            if (0 == $teamId) {
-                $GLOBALS['xoopsTpl']->assign('error', _AM_WGTEAMS_RELATIONS_NOTEAMSEL);
-            } else {
-                $GLOBALS['xoopsTpl']->assign('error', _AM_WGTEAMS_RELATIONS_NOTEAM);
             }
         }
         break;
     case 'new':
         $templateMain = 'wgteams_admin_relations.tpl';
         $adminObject->addItemButton(_AM_WGTEAMS_RELATIONS_LIST, 'relations.php', 'list');
-        $GLOBALS['xoopsTpl']->assign('navigation', $adminObject->displayNavigation('relations.php'));
-        $GLOBALS['xoopsTpl']->assign('buttons', $adminObject->displayButton('left', ''));
+        $GLOBALS['xoopsTpl']->assign('navigation', $adminObject->renderNavigation('relations.php'));
+        $GLOBALS['xoopsTpl']->assign('buttons', $adminObject->renderButton('left', ''));
         // Get Form
         $relationsObj = $relationsHandler->create();
         $relationsObj->setVar('rel_team_id', $teamId);
@@ -114,6 +116,9 @@ switch ($op) {
         }
         if (isset($relId)) {
             $relationsObj = $relationsHandler->get($relId);
+            if (!\is_object($relationsObj)) {
+                \redirect_header('relations.php', 3, \_AM_WGTEAMS_INVALID_PARAM);
+            }
         } else {
             $relationsObj = $relationsHandler->create();
         }
@@ -152,7 +157,7 @@ switch ($op) {
         $relationsObj->setVar('rel_date_create', \time());
         // Insert Data
         if ($relationsHandler->insert($relationsObj)) {
-            \redirect_header('relations.php?op=list&amp;team_id=' . $_POST['rel_team_id'], 2, _AM_WGTEAMS_FORM_OK);
+            \redirect_header('relations.php?op=list&team_id=' . $relTeamId, 2, _AM_WGTEAMS_FORM_OK);
         }
         // Get Form
         $GLOBALS['xoopsTpl']->assign('error', $relationsObj->getHtmlErrors());
@@ -163,54 +168,76 @@ switch ($op) {
         $templateMain = 'wgteams_admin_relations.tpl';
         $adminObject->addItemButton(_AM_WGTEAMS_RELATION_ADD, 'relations.php?op=new');
         $adminObject->addItemButton(_AM_WGTEAMS_RELATIONS_LIST, 'relations.php', 'list');
-        $GLOBALS['xoopsTpl']->assign('navigation', $adminObject->displayNavigation('relations.php'));
-        $GLOBALS['xoopsTpl']->assign('buttons', $adminObject->displayButton('left', ''));
+        $GLOBALS['xoopsTpl']->assign('navigation', $adminObject->renderNavigation('relations.php'));
+        $GLOBALS['xoopsTpl']->assign('buttons', $adminObject->renderButton('left', ''));
         // Get Form
         $relationsObj = $relationsHandler->get($relId);
+        if (!\is_object($relationsObj)) {
+            \redirect_header('relations.php', 3, \_AM_WGTEAMS_INVALID_PARAM);
+        }
         $form         = $relationsObj->getFormRelations();
         $GLOBALS['xoopsTpl']->assign('form', $form->render());
         break;
     case 'delete':
         $relationsObj = $relationsHandler->get($relId);
-        $teamObj = $teamsHandler->get($relationsObj->getVar('rel_team_id'));
+        $teamId = $relationsObj->getVar('rel_team_id');
+        $teamObj = $teamsHandler->get($teamId);
         $memberObj = $membersHandler->get($relationsObj->getVar('rel_member_id'));
-        if (1 == Request::getInt('ok', 0)) {
+        if (!\is_object($relationsObj) || !\is_object($teamObj) || !\is_object($memberObj)) {
+            \redirect_header('relations.php', 3, \_AM_WGTEAMS_INVALID_PARAM);
+        }
+        $templateMain = 'wgteams_admin_relations.tpl';
+        $GLOBALS['xoopsTpl']->assign('navigation', $adminObject->renderNavigation('relations.php'));
+        if (1 == Request::getInt('ok')) {
             if (!$GLOBALS['xoopsSecurity']->check()) {
                 \redirect_header('relations.php', 3, \implode(', ', $GLOBALS['xoopsSecurity']->getErrors()));
             }
             if ($relationsHandler->delete($relationsObj)) {
-                \redirect_header('relations.php', 3, _AM_WGTEAMS_FORM_DELETE_OK);
+                \redirect_header("relations.php?op=list&team_id=$teamId&start=$start&limit=$limit", 3, _AM_WGTEAMS_FORM_DELETE_OK);
             } else {
                 $GLOBALS['xoopsTpl']->assign('error', $relationsObj->getHtmlErrors());
             }
         } else {
-            $confirm = \str_replace('%n', $memberObj->getVar('member_firstname') . ' ' . $memberObj->getVar('member_lastname'), _AM_WGTEAMS_RELATION_DELETE);
-            $confirm = \str_replace('%t', $teamObj->getVar('team_name'), $confirm);
-            xoops_confirm(['ok' => 1, 'rel_id' => $relId, 'op' => 'delete'], $_SERVER['REQUEST_URI'], $confirm);
+            $confirmText = \str_replace('%n', $memberObj->getVar('member_firstname') . ' ' . $memberObj->getVar('member_lastname'), _AM_WGTEAMS_RELATION_DELETE);
+            $confirmText = \str_replace('%t', $teamObj->getVar('team_name'), $confirmText);
+            $customConfirm = new Common\Confirm(
+                ['ok' => 1, 'rel_id' => $relId, 'team_id' => $teamId, 'start' => $start, 'limit' => $limit, 'op' => 'delete'],
+                $_SERVER['REQUEST_URI'], $confirmText);
+            $form = $customConfirm->getFormConfirm();
+            $GLOBALS['xoopsTpl']->assign('form', $form->render());
         }
         break;
     case 'order':
+        if (!$GLOBALS['xoopsSecurity']->check()) {
+            \redirect_header('relations.php', 3, \implode(', ', $GLOBALS['xoopsSecurity']->getErrors()));
+        }
         $rorder = Request::getArray('rorder');
         for ($i = 0, $iMax = \count($rorder); $i < $iMax; $i++) {
             $relationsObj = $relationsHandler->get($rorder[$i]);
-            $relationsObj->setVar('rel_weight', $i + 1);
+            if (!\is_object($relationsObj)) {
+                \redirect_header('relations.php', 3, \_AM_WGTEAMS_INVALID_PARAM);
+            }
+            $relationsObj->setVar('rel_weight', $start + $i + 1);
             $relationsHandler->insert($relationsObj);
         }
+        $GLOBALS['xoopsTpl']->assign('wgteams_form_token', $GLOBALS['xoopsSecurity']->getTokenHTML());
+        $GLOBALS['xoopsTpl']->assign('wgteams_btn_token', $GLOBALS['xoopsSecurity']->createToken());
         break;
 }
 
-require __DIR__ . '/footer.php';
+require_once __DIR__ . '/footer.php';
 
 /**
  * @function getFormFilterTeam:
  * provide form with a dropdown select containing all existing teams
- * @param $teamId
- * @param $start
- * @param $limit
+ * @param int $teamId
+ * @param int $start
+ * @param int $limit
  * @param bool $action
  * @return \XoopsThemeForm
+ * @throws Exception
  */
-function getFormFilterTeam($teamId, $start, $limit, $action = false)
+function getFormFilterTeam(int $teamId, int $start, int $limit, bool $action = false): XoopsThemeForm
 {
     $helper = \XoopsModules\Wgteams\Helper::getInstance();
     if (!$action) {

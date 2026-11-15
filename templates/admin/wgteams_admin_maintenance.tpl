@@ -34,8 +34,7 @@
             <tr class="<{cycle values='odd, even'}>">
                 <td class='left'><{$smarty.const._AM_WGTEAMS_MAINTENANCE_DELETE_UNUSED}></td>
                 <td class='left'><{$maintainance_dui_desc}></td>
-
-                <td class='center '>
+                <td class='center xo-buttons'>
                     <{if $show_result|default:false}>
                         <{foreach item=image from=$result_unused}>
                             <div class='img-unused'>
@@ -53,7 +52,7 @@
             <tr class="<{cycle values='odd, even'}>">
                 <td class='left'><{$smarty.const._AM_WGTEAMS_MAINTENANCE_CHECK_SPACE}></td>
                 <td class='left'><{$maintainance_cs_desc}></td>
-                <td class='left'>
+                <td class='center xo-buttons'>
                     <{if $show_result|default:false}>
                         <{if $result_success|default:false}><span><{$result_success}></span><{/if}>
                         <{if $result_error|default:false}><span class='maintenance-error'><{$result_error}></span><{/if}>

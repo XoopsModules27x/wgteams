@@ -34,7 +34,7 @@ class Teams extends \XoopsObject
     /**
      * Constructor
      *
-     * @param null
+     *
      */
     public function __construct()
     {
@@ -55,7 +55,7 @@ class Teams extends \XoopsObject
 
     /**
      * @static function getInstance
-     * @param null
+     *
      * @return static
      */
     public static function getInstance()
@@ -74,7 +74,7 @@ class Teams extends \XoopsObject
      * @param mixed $action
      * @return \XoopsThemeForm
      */
-    public function getFormTeams($action = false)
+    public function getFormTeams($action = false): \XoopsThemeForm
     {
         global $xoopsUser;
 
@@ -82,7 +82,7 @@ class Teams extends \XoopsObject
             $action = $_SERVER['REQUEST_URI'];
         }
         // Title
-        $title = $this->isNew() ? \sprintf(_AM_WGTEAMS_TEAM_ADD) : \sprintf(_AM_WGTEAMS_TEAM_EDIT);
+        $title = $this->isNew() ? _AM_WGTEAMS_TEAM_ADD : _AM_WGTEAMS_TEAM_EDIT;
         // Get Theme Form
         \xoops_load('XoopsFormLoader');
         $form = new \XoopsThemeForm($title, 'form', $action, 'post', true);
@@ -113,16 +113,16 @@ class Teams extends \XoopsObject
             $imageSelect->addOption($image, $image);
         }
         $imageSelect->setExtra("onchange='showImgSelected(\"image2\", \"team_image\", \"" . $imageDirectory . '", "", "' . \XOOPS_URL . "\")'");
-        $imageTray->addElement($imageSelect, false);
+        $imageTray->addElement($imageSelect);
         $imageTray->addElement(new \XoopsFormLabel('', "<br><img src='" . \XOOPS_URL . '/' . $imageDirectory . '/' . $teamImage . "' name='image2' id='image2' alt='' style='max-width:100px;' />"));
         // Form File
         $fileSelectTray = new \XoopsFormElementTray('', '<br>');
         $fileSelectTray->addElement(new \XoopsFormFile(_AM_WGTEAMS_FORM_UPLOAD_IMG, 'attachedfile', $this->helper->getConfig('wgteams_img_maxsize')));
 
-        $cond = '<br>- ' . _MI_WGTEAMS_IMG_MAXSIZE . ': ' . ($this->helper->getConfig('wgteams_img_maxsize') / 1048576) . ' ' . _MI_WGTEAMS_SIZE_MB;
-        $cond .= '<br>- ' . _MI_WGTEAMS_MAXWIDTH . ': ' . $this->helper->getConfig('maxwidth') . ' px';
-        $cond .= '<br>- ' . _MI_WGTEAMS_MAXHEIGHT . ': ' . $this->helper->getConfig('maxheight') . ' px';
-        $cond .= '<br>- ' . _MI_WGTEAMS_IMG_MIMETYPES . ': ' . \implode(', ', $this->helper->getConfig('wgteams_img_mimetypes'));
+        $cond = '<br>- ' . _AM_WGTEAMS_IMG_MAXSIZE . ': ' . ($this->helper->getConfig('wgteams_img_maxsize') / 1048576) . ' ' . _AM_WGTEAMS_SIZE_MB;
+        $cond .= '<br>- ' . _AM_WGTEAMS_MAXWIDTH . ': ' . $this->helper->getConfig('maxwidth') . ' px';
+        $cond .= '<br>- ' . _AM_WGTEAMS_MAXHEIGHT . ': ' . $this->helper->getConfig('maxheight') . ' px';
+        $cond .= '<br>- ' . _AM_WGTEAMS_MIMETYPES . ': ' . \implode(', ', $this->helper->getConfig('wgteams_img_mimetypes'));
         $fileSelectTray->addElement(new \XoopsFormLabel(_AM_WGTEAMS_IMG_EDITOR_UPLOAD, $cond));
         $imageTray->addElement($fileSelectTray);
 
@@ -141,7 +141,7 @@ class Teams extends \XoopsObject
         $team_nb_colsSelect->addOption(2, '  2  ');
         $team_nb_colsSelect->addOption(3, '  3  ');
         $team_nb_colsSelect->addOption(4, '  4  ');
-        $form->addElement($team_nb_colsSelect, false);
+        $form->addElement($team_nb_colsSelect);
         // Form Text TeamTabletype
         $team_tablestyle    = $this->isNew() ? 'default' : $this->getVar('team_tablestyle');
         $team_tablestyleSel = new \XoopsFormSelect(_AM_WGTEAMS_TEAM_TABLESTYLE, 'team_tablestyle', $team_tablestyle);
@@ -149,7 +149,7 @@ class Teams extends \XoopsObject
         $team_tablestyleSel->addOption('wgteams-bordered', _AM_WGTEAMS_TEAM_TABLESTYLE_BORDERED);
         $team_tablestyleSel->addOption('wgteams-striped', _AM_WGTEAMS_TEAM_TABLESTYLE_STRIPED);
         $team_tablestyleSel->addOption('wgteams-lined', _AM_WGTEAMS_TEAM_TABLESTYLE_LINED);
-        $form->addElement($team_tablestyleSel, false);
+        $form->addElement($team_tablestyleSel);
         // Form Text TeamImagetype
         $team_imagestyle    = $this->isNew() ? 'default' : $this->getVar('team_imagestyle');
         $team_imagestyleSel = new \XoopsFormSelect(_AM_WGTEAMS_TEAM_IMAGESTYLE, 'team_imagestyle', $team_imagestyle);
@@ -157,14 +157,14 @@ class Teams extends \XoopsObject
         $team_imagestyleSel->addOption('img-circle rounded-circle', _AM_WGTEAMS_TEAM_IMAGESTYLE_CIRCLE);
         $team_imagestyleSel->addOption('img-rounded rounded', _AM_WGTEAMS_TEAM_IMAGESTYLE_ROUNDED);
         $team_imagestyleSel->addOption('img-thumbnail', _AM_WGTEAMS_TEAM_IMAGESTYLE_THUMBNAIL);
-        $form->addElement($team_imagestyleSel, false);
+        $form->addElement($team_imagestyleSel);
         // Form Text Teamdisplaystyle
         $team_displaystyle    = $this->isNew() ? 'default' : $this->getVar('team_displaystyle');
         $team_displaystyleSel = new \XoopsFormSelect(_AM_WGTEAMS_TEAM_DISPLAYSTYLE, 'team_displaystyle', $team_displaystyle);
         $team_displaystyleSel->addOption('left', _AM_WGTEAMS_TEAM_DISPLAYSTYLE_LEFT);
         $team_displaystyleSel->addOption('default', _AM_WGTEAMS_TEAM_DISPLAYSTYLE_DEF);
         $team_displaystyleSel->addOption('right', _AM_WGTEAMS_TEAM_DISPLAYSTYLE_RIGHT);
-        $form->addElement($team_displaystyleSel, false);
+        $form->addElement($team_displaystyleSel);
         // Form Text TeamWeight
         $teamWeight = $this->isNew() ? '0' : $this->getVar('team_weight');
         $form->addElement(new \XoopsFormHidden('team_weight', $teamWeight));
@@ -185,12 +185,12 @@ class Teams extends \XoopsObject
 
     /**
      * Get Values
-     * @param null $keys
-     * @param null $format
-     * @param null $maxDepth
+     * @param $keys
+     * @param $format
+     * @param $maxDepth
      * @return array
      */
-    public function getValuesTeams($keys = null, $format = null, $maxDepth = null)
+    public function getValuesTeams($keys = null, $format = null, $maxDepth = null): array
     {
         $helper              = Helper::getInstance();
         $ret                 = $this->getValues($keys, $format, $maxDepth);
@@ -215,7 +215,7 @@ class Teams extends \XoopsObject
      *
      * @return array
      **/
-    public function toArray()
+    public function toArray(): array
     {
         $ret  = [];
         $vars = &$this->getVars();

@@ -23,12 +23,10 @@ declare(strict_types=1);
 
 use XoopsModules\Wgteams;
 
+require_once \dirname(__DIR__) . '/preloads/autoloader.php';
+
 $helper = Wgteams\Helper::getInstance();
 
-$pathIcon32 = \Xmf\Module\Admin::menuIconPath('');
-if (\is_object($helper->getModule())) {
-    $pathModIcon32 = $helper->getModule()->getInfo('modicons32');
-}
 $adminmenu[] = [
     'title' => _MI_WGTEAMS_ADMENU1,
     'link'  => 'admin/index.php',
@@ -59,16 +57,20 @@ $adminmenu[] = [
     'link'  => 'admin/maintenance.php',
     'icon'  => 'assets/icons/32/maintenance.png'
 ];
-$adminmenu[] = [
-    'title' => _MI_WGTEAMS_ADMENU8,
-    'link'  => 'admin/clone.php',
-    'icon'  => 'assets/icons/32/clone.png'
-];
-$adminmenu[] = [
-    'title' => _MI_WGTEAMS_ADMENU6,
-    'link'  => 'admin/feedback.php',
-    'icon'  => 'assets/icons/32/feedback.png'
-];
+if ($helper->getConfig('displayTabClone')) {
+    $adminmenu[] = [
+        'title' => _MI_WGTEAMS_ADMENU8,
+        'link' => 'admin/clone.php',
+        'icon' => 'assets/icons/32/clone.png'
+    ];
+}
+if ($helper->getConfig('displayTabFeedback')) {
+    $adminmenu[] = [
+        'title' => _MI_WGTEAMS_ADMENU6,
+        'link'  => 'admin/feedback.php',
+        'icon'  => 'assets/icons/32/feedback.png'
+    ];
+}
 $adminmenu[] = [
     'title' => _MI_WGTEAMS_ABOUT,
     'link'  => 'admin/about.php',

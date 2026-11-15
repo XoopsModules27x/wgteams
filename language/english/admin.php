@@ -50,7 +50,7 @@ require_once __DIR__ . '/modinfo.php';
 // Elements of Team
 \define('_AM_WGTEAMS_TEAM_ID', 'Id');
 \define('_AM_WGTEAMS_TEAM_NAME', 'Team name');
-\define('_AM_WGTEAMS_TEAM_DESCR', 'Team descr');
+\define('_AM_WGTEAMS_TEAM_DESCR', 'Team description');
 \define('_AM_WGTEAMS_TEAM_IMAGE', 'Team image');
 \define('_AM_WGTEAMS_TEAM_IMAGES', 'Images teams');
 \define('_AM_WGTEAMS_TEAM_NB_COLS', 'Nb cols');
@@ -206,3 +206,16 @@ require_once __DIR__ . '/modinfo.php';
 \define('_AM_WGTEAMS_INFOFIELD_CLASS_TEAM', 'Show on team page');
 \define('_AM_WGTEAMS_INFOFIELD_CLASS_DETAILS', 'Show in details');
 \define('_AM_WGTEAMS_USEDETAILS_NONE', 'Feature details is not activated. Activate in module preferences first');
+//version 2.1.0
+\define('_AM_WGTEAMS_IS_ONLINE', 'Online, click to set offline');
+\define('_AM_WGTEAMS_IS_OFFLINE', 'Offline, click to set online');
+\define('_AM_WGTEAMS_IMG_MAXSIZE', 'Max size');
+\define('_AM_WGTEAMS_SIZE_MB', 'MB');
+\define('_AM_WGTEAMS_MIMETYPES', 'Mime Types');
+\define('_AM_WGTEAMS_MAXWIDTH', 'Maximum width');
+\define('_AM_WGTEAMS_MAXHEIGHT', 'Maximum height');
+\define('_AM_WGTEAMS_SELECT_TEAMS', 'Please select a team');
+\define('_AM_WGTEAMS_INVALID_PARAM', 'Invalid parameter');
+\define('_AM_WGTEAMS_INVALID_PARAM_IMG', 'Invalid parameter for image size/dimensions. Please check module preferences.');
+\define('_AM_WGTEAMS_IMG_EDITOR_TEAM', "Image editor for team '%s'");
+\define('_AM_WGTEAMS_IMG_EDITOR_MEMBER', "Image editor for member '%s'");

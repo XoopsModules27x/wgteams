@@ -21,6 +21,8 @@ namespace XoopsModules\Wgteams;
 
 //\defined('XOOPS_ROOT_PATH') || die('Restricted access';
 
+defined('XOOPS_ROOT_PATH') || exit('Restricted access');
+
 /**
  * class Constants
  */
@@ -32,16 +34,16 @@ class Constants
 
     // common constants
     // constants for image class
-    const IMAGECLASS_MEMBER = 1;
-    const IMAGECLASS_TEAM   = 2;
+    const int IMAGECLASS_MEMBER = 1;
+    const int IMAGECLASS_TEAM   = 2;
 
     // constants for details
-    const USEDETAILS_NONE  = 0;
-    const USEDETAILS_TAB   = 1;
-    const USEDETAILS_MODAL = 2;
-    const CLASS_DEFAULT    = 0;
-    const CLASS_INDEX      = 1;
-    const CLASS_TEAM       = 2;
-    const CLASS_DETAILS    = 3;
+    const int USEDETAILS_NONE  = 0;
+    const int USEDETAILS_TAB   = 1;
+    const int USEDETAILS_MODAL = 2;
+    const int CLASS_DEFAULT    = 0;
+    const int CLASS_INDEX      = 1;
+    const int CLASS_TEAM       = 2;
+    const int CLASS_DETAILS    = 3;
 
 }

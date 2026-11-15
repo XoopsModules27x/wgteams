@@ -20,6 +20,6 @@ declare(strict_types=1);
  * @author          Goffy - Wedega.com - Email:<webmaster@wedega.com> - Website:<https://wedega.com>
  */
 if (isset($templateMain)) {
-    $GLOBALS['xoopsTpl']->display("db:{$templateMain}");
+    $GLOBALS['xoopsTpl']->display("db:$templateMain");
 }
 xoops_cp_footer();

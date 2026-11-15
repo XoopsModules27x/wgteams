@@ -206,3 +206,16 @@ require_once __DIR__ . '/modinfo.php';
 \define('_AM_WGTEAMS_INFOFIELD_CLASS_TEAM', 'Auf Teamseite anzeigen');
 \define('_AM_WGTEAMS_INFOFIELD_CLASS_DETAILS', 'In Details anzeigen');
 \define('_AM_WGTEAMS_USEDETAILS_NONE', 'Das Feature Details ist nicht aktiviert. Aktive zuerst das Feature in den Moduleinstellungen');
+//version 2.1.0
+\define('_AM_WGTEAMS_IS_ONLINE', 'Online, klicke um Offline zu setzen');
+\define('_AM_WGTEAMS_IS_OFFLINE', 'Offline, klicke um Online zu setzen');
+\define('_AM_WGTEAMS_IMG_MAXSIZE', 'Maximale Größe');
+\define('_AM_WGTEAMS_SIZE_MB', 'MB');
+\define('_AM_WGTEAMS_MIMETYPES', 'Mime Types');
+\define('_AM_WGTEAMS_MAXWIDTH', 'Maximale Breite');
+\define('_AM_WGTEAMS_MAXHEIGHT', 'Maximale Höhe');
+\define('_AM_WGTEAMS_SELECT_TEAMS', 'Bitte ein Team auswählen');
+\define('_AM_WGTEAMS_INVALID_PARAM', 'Ungültiger Parameter');
+\define('_AM_WGTEAMS_INVALID_PARAM_IMG', 'Ungültiger Parameter für Bildgröße/-dimensionen. Bitte überprüfen Sie die Moduleinstellungen.');
+\define('_AM_WGTEAMS_IMG_EDITOR_TEAM', "Bildbearbeiter für Team '%s'");
+\define('_AM_WGTEAMS_IMG_EDITOR_MEMBER', "Bildbearbeiter für Mitglied '%s'");

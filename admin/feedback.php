@@ -23,7 +23,7 @@ declare(strict_types=1);
 
 use Xmf\Request;
 
-include __DIR__ . '/header.php';
+include_once __DIR__ . '/header.php';
 
 $adminObject = \Xmf\Module\Admin::getInstance();
 
@@ -37,7 +37,7 @@ $moduleDirName = $GLOBALS['xoopsModule']->getVar('dirname');
 switch ($op) {
     case 'list':
     default:
-        $GLOBALS['xoopsTpl']->assign('navigation', $adminObject->displayNavigation('feedback.php'));
+        $GLOBALS['xoopsTpl']->assign('navigation', $adminObject->renderNavigation('feedback.php'));
         $feedback->name  = $GLOBALS['xoopsUser']->getVar('name');
         $feedback->email = $GLOBALS['xoopsUser']->getVar('email');
         $feedback->site  = \XOOPS_URL;
@@ -50,7 +50,7 @@ switch ($op) {
             \redirect_header('index.php', 3, \implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
         }
 
-        $GLOBALS['xoopsTpl']->assign('navigation', $adminObject->displayNavigation('feedback.php'));
+        $GLOBALS['xoopsTpl']->assign('navigation', $adminObject->renderNavigation('feedback.php'));
 
         $your_name  = Request::getString('your_name');
         $your_site  = Request::getString('your_site');
@@ -59,12 +59,12 @@ switch ($op) {
         $fb_content = Request::getText('fb_content');
         $fb_content = \str_replace(["\r\n", "\n", "\r"], '<br>', $fb_content); //clean line break from dhtmltextarea
 
-        $title       = _FB_SEND_FOR . $GLOBALS['xoopsModule']->getVar('dirname');
-        $body        = _FB_NAME . ': ' . $your_name . '<br>';
-        $body        .= _FB_MAIL . ': ' . $your_mail . '<br>';
-        $body        .= _FB_SITE . ': ' . $your_site . '<br>';
-        $body        .= _FB_TYPE . ': ' . $fb_type . '<br><br>';
-        $body        .= _FB_TYPE_CONTENT . ':<br>';
+        $title       = _CO_WGTEAMS_FB_SEND_FOR . $GLOBALS['xoopsModule']->getVar('dirname');
+        $body        = _CO_WGTEAMS_FB_NAME . ': ' . $your_name . '<br>';
+        $body        .= _CO_WGTEAMS_FB_MAIL . ': ' . $your_mail . '<br>';
+        $body        .= _CO_WGTEAMS_FB_SITE . ': ' . $your_site . '<br>';
+        $body        .= _CO_WGTEAMS_FB_TYPE . ': ' . $fb_type . '<br><br>';
+        $body        .= _CO_WGTEAMS_FB_TYPE_CONTENT . ':<br>';
         $body        .= $fb_content;
         $xoopsMailer = xoops_getMailer();
         $xoopsMailer->useMail();
@@ -76,7 +76,7 @@ switch ($op) {
         $xoopsMailer->setBody($body);
         $ret = $xoopsMailer->send();
         if ($ret) {
-            \redirect_header('index.php', 3, _FB_SEND_SUCCESS);
+            \redirect_header('index.php', 3, _CO_WGTEAMS_FB_SEND_SUCCESS);
         }
 
         // show form with content again
@@ -86,11 +86,11 @@ switch ($op) {
         $feedback->type    = $fb_type;
         $feedback->content = $fb_content;
         echo '<div style="text-align:center;width:80%;padding:10px;border:2px solid #ff0000;color:#ff0000;margin-right:auto;margin-left:auto;">
-            <h3>' . _FB_SEND_ERROR . '</h3>
+            <h3>' . _CO_WGTEAMS_FB_SEND_ERROR . '</h3>
             </div>';
         $form = $feedback->getFormFeedback();
         echo $form->display();
 
         break;
 }
-include __DIR__ . '/footer.php';
+include_once __DIR__ . '/footer.php';

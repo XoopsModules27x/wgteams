@@ -40,7 +40,7 @@ class Infofields extends \XoopsObject
     /**
      * Constructor
      *
-     * @param null
+     *
      */
     public function __construct()
     {
@@ -56,7 +56,7 @@ class Infofields extends \XoopsObject
 
     /**
      * @static function getInstance
-     * @param null
+     *
      * @return static
      */
     public static function getInstance()
@@ -75,7 +75,7 @@ class Infofields extends \XoopsObject
      * @param bool|mixed $action
      * @return \XoopsThemeForm
      */
-    public function getFormInfofields($action = false)
+    public function getFormInfofields($action = false): \XoopsThemeForm
     {
         global $xoopsUser;
 
@@ -85,7 +85,7 @@ class Infofields extends \XoopsObject
 
         $useDetails = (int)$this->helper->getConfig('wgteams_usedetails') > Constants::USEDETAILS_NONE;
         // Title
-        $title = $this->isNew() ? \sprintf(_AM_WGTEAMS_INFOFIELD_ADD) : \sprintf(_AM_WGTEAMS_INFOFIELD_EDIT);
+        $title = $this->isNew() ? _AM_WGTEAMS_INFOFIELD_ADD : _AM_WGTEAMS_INFOFIELD_EDIT;
         // Get Theme Form
         \xoops_load('XoopsFormLoader');
         $form = new \XoopsThemeForm($title, 'form', $action, 'post', true);
@@ -123,12 +123,12 @@ class Infofields extends \XoopsObject
 
     /**
      * Get Values
-     * @param null $keys
-     * @param null $format
-     * @param null $maxDepth
+     * @param $keys
+     * @param $format
+     * @param $maxDepth
      * @return array
      */
-    public function getValuesInfofields($keys = null, $format = null, $maxDepth = null)
+    public function getValuesInfofields($keys = null, $format = null, $maxDepth = null): array
     {
         $ret                       = $this->getValues($keys, $format, $maxDepth);
         $ret['field_id']           = $this->getVar('infofield_id');
@@ -160,7 +160,7 @@ class Infofields extends \XoopsObject
      *
      * @return array
      **/
-    public function toArray()
+    public function toArray(): array
     {
         $ret  = [];
         $vars = &$this->getVars();

@@ -37,7 +37,7 @@ class Relations extends \XoopsObject
     /**
      * Constructor
      *
-     * @param null
+     *
      */
     public function __construct()
     {
@@ -62,7 +62,7 @@ class Relations extends \XoopsObject
 
     /**
      * @static function getInstance
-     * @param null
+     *
      * @return static
      */
     public static function getInstance()
@@ -80,8 +80,9 @@ class Relations extends \XoopsObject
      *
      * @param mixed $action
      * @return \XoopsThemeForm
+     * @throws \Exception
      */
-    public function getFormRelations($action = false)
+    public function getFormRelations($action = false): \XoopsThemeForm
     {
         global $xoopsUser;
         
@@ -110,7 +111,7 @@ class Relations extends \XoopsObject
         }
 
         // Title
-        $title = $this->isNew() ? \sprintf(_AM_WGTEAMS_RELATION_ADD) : \sprintf(_AM_WGTEAMS_RELATION_EDIT);
+        $title = $this->isNew() ? _AM_WGTEAMS_RELATION_ADD : _AM_WGTEAMS_RELATION_EDIT;
         // Get Theme Form
         \xoops_load('XoopsFormLoader');
         $form = new \XoopsThemeForm($title, 'form', $action, 'post', true);
@@ -226,13 +227,13 @@ class Relations extends \XoopsObject
     }
 
     /**
-     * Get Values
-     * @param null $keys
-     * @param null $format
-     * @param null $maxDepth
+     * @param $keys
+     * @param $format
+     * @param $maxDepth
      * @return array
+     * @throws \Exception
      */
-    public function getValuesRelations($keys = null, $format = null, $maxDepth = null)
+    public function getValuesRelations($keys = null, $format = null, $maxDepth = null): array
     {
         $helper              = Helper::getInstance();
         $ret                 = $this->getValues($keys, $format, $maxDepth);
@@ -248,7 +249,7 @@ class Relations extends \XoopsObject
             if ($fieldId > 0 && \is_object($infofield)) {
                 $ret['info_' . $i . '_field'] = $infofield->getVar('infofield_name');
             }
-            $ret['info_' . $i] = $helper::truncateHtml($this->getVar('rel_info_' . $i, 'n'));;
+            $ret['info_' . $i] = $helper::truncateHtml($this->getVar('rel_info_' . $i, 'n'));
         }
         $ret['weight']       = $this->getVar('rel_weight');
         $ret['submitter']    = \XoopsUser::getUnameFromId($this->getVar('rel_submitter'));
@@ -262,7 +263,7 @@ class Relations extends \XoopsObject
      *
      * @return array
      **/
-    public function toArray()
+    public function toArray(): array
     {
         $ret  = [];
         $vars = &$this->getVars();

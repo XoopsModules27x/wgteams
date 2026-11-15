@@ -29,7 +29,7 @@ use XoopsModules\Wgteams\{
 };
 //use XoopsModules\Wgteams\Common\AjaxHelper;
 
-require __DIR__ . '/header.php';
+require_once __DIR__ . '/header.php';
 
 $GLOBALS['xoopsOption']['template_main'] = 'wgteams_teams.tpl';
 require_once \XOOPS_ROOT_PATH . '/header.php';
@@ -135,7 +135,7 @@ wgteamsMetaDescription(_MD_WGTEAMS_TEAM_DESC);
 
 $GLOBALS['xoopsTpl']->assign('wgteams_url_index', \WGTEAMS_URL . '/index.php');
 $GLOBALS['xoopsTpl']->assign('xoops_mpageurl', \WGTEAMS_URL . '/index.php');
-require __DIR__ . '/footer.php';
+require_once __DIR__ . '/footer.php';
 
 
 

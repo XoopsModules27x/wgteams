@@ -28,7 +28,7 @@ use XoopsModules\Wgteams\Common;
  *
  * @return bool true if ready to install, false if not
  */
-function xoops_module_pre_install_wgteams(\XoopsModule $module)
+function xoops_module_pre_install_wgteams(\XoopsModule $module): bool
 {
     require \dirname(__DIR__) . '/preloads/autoloader.php';
 
@@ -45,7 +45,7 @@ function xoops_module_pre_install_wgteams(\XoopsModule $module)
  *
  * @return bool true if installation successful, false if not
  */
-function xoops_module_install_wgteams(\XoopsModule $module)
+function xoops_module_install_wgteams(\XoopsModule $module): bool
 {
     require_once \dirname(__DIR__, 3) . '/mainfile.php';
 
@@ -102,7 +102,7 @@ function xoops_module_install_wgteams(\XoopsModule $module)
 
     //delete .html entries from the tpl table
     $sql = 'DELETE FROM ' . $GLOBALS['xoopsDB']->prefix('tplfile') . " WHERE `tpl_module` = '" . $module->getVar('dirname', 'n') . "' AND `tpl_file` LIKE '%.html%'";
-    $GLOBALS['xoopsDB']->queryF($sql);
+    $GLOBALS['xoopsDB']->exec($sql);
 
     return true;
 }

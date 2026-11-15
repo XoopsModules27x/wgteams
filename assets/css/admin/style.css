@@ -1,4 +1,33 @@
 /* Sortable tables & fields */
-img.icon-sortable {
+.icon-sortable {
+    background: var(--primary) !important;
+    color: var(--text-primary) !important;
+    padding:5px;
+    border-radius:5px;
+    font-size:150%;
     cursor: move;
+}
+
+.icon-info {
+    color: var(--text-primary) !important;
+    padding:5px;
+    border: 1px solid var(--text-primary) !important;
+    border-radius:5px;
+    font-size:150%;
+}
+.info-box {
+    background: var(--primary) !important;
+    color: var(--text-primary) !important;
+    padding:5px;
+    border-radius:5px;
+}
+.info-box-light {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
+    padding:10px;
+    border: 1px solid var(--border-bright) !important;
+    border-radius:5px;
+}
+.width-action {
+    width:200px;
 }

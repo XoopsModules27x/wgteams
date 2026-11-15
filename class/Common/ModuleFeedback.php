@@ -50,6 +50,7 @@ class ModuleFeedback extends \XoopsObject
         if (!$instance) {
             $instance = new self();
         }
+        return $instance;
     }
 
     /**

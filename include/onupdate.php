@@ -19,6 +19,8 @@ declare(strict_types=1);
  * @author          Goffy - Wedega.com - Email:<webmaster@wedega.com> - Website:<https://wedega.com>
  */
 
+defined('XOOPS_ROOT_PATH') || exit('Restricted access');
+
 use XoopsModules\Wgteams;
 use XoopsModules\Wgteams\Common\ {
     Configurator,
@@ -50,7 +52,7 @@ function xoops_module_pre_update_wgteams(\XoopsModule $module)
 /**
  * Performs tasks required during update of the module
  * @param \XoopsModule $module {@link XoopsModule}
- * @param null        $previousVersion
+ *        $previousVersion
  *
  * @return bool true if update successful, false if not
  */
@@ -97,9 +99,7 @@ function xoops_module_update_wgteams(\XoopsModule $module, $previousVersion = nu
     $migrate->synchronizeSchema();
     
     // maintenance of tables
-    $ret = maintaintables($module);
-
-    return $ret;
+    return maintaintables($module);
 }
 
 /**
@@ -107,7 +107,7 @@ function xoops_module_update_wgteams(\XoopsModule $module, $previousVersion = nu
  * @param mixed $module
  * @return bool
  */
-function maintaintables(&$module)
+function maintaintables($module)
 {
     global $xoopsDB;
     $sql = 'DELETE '
@@ -123,7 +123,7 @@ function maintaintables(&$module)
            . '.member_id WHERE ((('
            . $xoopsDB->prefix('wgteams_members')
            . '.member_id) Is Null));';
-    if (!$result = $xoopsDB->queryF($sql)) {
+    if (!$result = $xoopsDB->exec($sql)) {
         xoops_error($xoopsDB->error() . '<br>' . $sql);
         $module->setErrors("Error maintain table 'wgteams_relations' concerning members");
 
@@ -142,7 +142,7 @@ function maintaintables(&$module)
            . '.team_id WHERE ((('
            . $xoopsDB->prefix('wgteams_teams')
            . '.team_id) Is Null));';
-    if (!$result = $xoopsDB->queryF($sql)) {
+    if (!$result = $xoopsDB->exec($sql)) {
         xoops_error($xoopsDB->error() . '<br>' . $sql);
         $module->setErrors("Error maintain table 'wgteams_relations' concerning teams");
 
@@ -159,7 +159,6 @@ function maintaintables(&$module)
  */
 function wgteams_check_db($module)
 {
-    $ret = true;
     //insert here code for database check
 
     /*
@@ -197,5 +196,5 @@ function wgteams_check_db($module)
         }
     }
     */
-    return $ret;
+    return true;
 }

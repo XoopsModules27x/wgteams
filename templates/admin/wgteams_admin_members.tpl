@@ -14,7 +14,7 @@
                 <th class="center"><{$smarty.const._AM_WGTEAMS_MEMBER_IMAGE}></th>
                 <th class="center"><{$smarty.const._AM_WGTEAMS_SUBMITTER}></th>
                 <th class="center"><{$smarty.const._AM_WGTEAMS_DATE_CREATE}></th>
-                <th class="center width5"><{$smarty.const._AM_WGTEAMS_FORM_ACTION}></th>
+                <th class="center width-action"><{$smarty.const._AM_WGTEAMS_FORM_ACTION}></th>
             </tr>
         </thead>
         <{if $members_count|default:false}>
@@ -35,10 +35,10 @@
                     </td>
                     <td class="center"><{$member.submitter}></td>
                     <td class="center"><{$member.date_create}></td>
-                    <td class="center  width5">
-                    <a href="members.php?op=edit&amp;member_id=<{$member.id}>" title="<{$smarty.const._EDIT}>"><img src="<{xoModuleIcons16 'edit.png'}>" alt="<{$smarty.const._EDIT}>"></a>
-                    <a href="image_editor.php?op=edit_member&amp;member_id=<{$member.id}>" title="<{$smarty.const._AM_WGTEAMS_IMG_EDITOR}>"><img src="<{$pathModIcon16}>/image_editor.png" alt="<{$smarty.const._AM_WGTEAMS_IMG_EDITOR}>"></a>
-                    <a href="members.php?op=delete&amp;member_id=<{$member.id}>" title="<{$smarty.const._DELETE}>"><img src="<{xoModuleIcons16 'delete.png'}>" alt="<{$smarty.const._DELETE}>"></a>
+                    <td class="center width-action xo-buttons">
+                    <a href="members.php?op=edit&member_id=<{$member.id}>&start=<{$start}>&limit=<{$limit}>" title="<{$smarty.const._EDIT}>"><i class="fa fa-edit"></i></a>
+                    <a href="image_editor.php?op=edit_member&member_id=<{$member.id}>&start=<{$start}>&limit=<{$limit}>" title="<{$smarty.const._AM_WGTEAMS_IMG_EDITOR}>"><i class='fa fa-image'></i></a>
+                    <a href="members.php?op=delete&member_id=<{$member.id}>&start=<{$start}>&limit=<{$limit}>" title="<{$smarty.const._DELETE}>"><i class='fa fa-trash'></i></a>
                     </td>
                 </tr>
             <{/foreach}>
@@ -49,7 +49,6 @@
     <{if $pagenav|default:false}>
         <div class="xo-pagenav floatright"><{$pagenav}></div><div class="clear spacer"></div>
     <{/if}>
-
 <{/if}>
 <{if $form|default:false}>
     <{$form}>
