@@ -19,23 +19,18 @@ declare(strict_types=1);
  * @author          Goffy - Wedega.com - Email:<webmaster@wedega.com> - Website:<https://wedega.com>
  */
 
+defined('XOOPS_ROOT_PATH') || exit('Restricted access');
+
 /**
- * @param $val
- * @return float|int
+ * @param int $val
+ * @return int
  */
-function wgteamsReturnBytes($val)
+function wgteamsReturnBytes($val): int
 {
-    switch (mb_substr($val, -1)) {
-        case 'K':
-        case 'k':
-            return (int)$val * 1024;
-        case 'M':
-        case 'm':
-            return (int)$val * 1048576;
-        case 'G':
-        case 'g':
-            return (int)$val * 1073741824;
-        default:
-            return $val;
-    }
+    return match (mb_substr($val, -1)) {
+        'K', 'k' => (int)$val * 1024,
+        'M', 'm' => (int)$val * 1048576,
+        'G', 'g' => (int)$val * 1073741824,
+        default => (int)$val,
+    };
 }

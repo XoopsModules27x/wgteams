@@ -56,15 +56,15 @@ require_once __DIR__ . '/common.php';
 \define('_MI_WGTEAMS_IMG_MAXSIZE_DESC', 'Set a number of max size uploads file');
 \define('_MI_WGTEAMS_SIZE_MB', 'MB');
 \define('_MI_WGTEAMS_IMG_MIMETYPES', 'Mime Types');
-\define('_MI_WGTEAMS_IMG_MIMETYPES_DESC', 'Set the mime types selected');
-\define('_MI_WGTEAMS_MAXWIDTH', 'Maximum width upload');
-\define('_MI_WGTEAMS_MAXWIDTH_DESC', 'Set the max width which is allowed for uploading images (in pixel)<br>0 means that images keep original size<br>If original image is smaller the image will be not enlarged');
-\define('_MI_WGTEAMS_MAXHEIGHT', 'Maximum height upload');
-\define('_MI_WGTEAMS_MAXHEIGHT_DESC', 'Set the max height which is allowed for uploading images (in pixel)<br>0 means that images keep original size<br>If original image is smaller the image will be not enlarged');
-\define('_MI_WGTEAMS_MAXWIDTH_IMGEDITOR', 'Maximum width upload');
-\define('_MI_WGTEAMS_MAXWIDTH_IMGEDITOR_DESC', 'Set the max width which is allowed for uploading images (in pixel)<br>0 means that images keep original size<br>If original image is smaller the image will be not enlarged');
-\define('_MI_WGTEAMS_MAXHEIGHT_IMGEDITOR', 'Maximum height upload');
-\define('_MI_WGTEAMS_MAXHEIGHT_IMGEDITOR_DESC', 'Set the max height which is allowed for uploading images (in pixel)<br>0 means that images keep original size<br>If original image is smaller the image will be not enlarged');
+\define('_MI_WGTEAMS_IMG_MIMETYPES_DESC', 'Define which mime-types are allowed for file upload.');
+\define('_MI_WGTEAMS_IMG_MAXWIDTH', 'Maximum width upload images');
+\define('_MI_WGTEAMS_IMG_MAXWIDTH_DESC', 'Set the max width which is allowed for uploading images (in pixel)');
+\define('_MI_WGTEAMS_IMG_MAXHEIGHT', 'Maximum height upload images');
+\define('_MI_WGTEAMS_IMG_MAXHEIGHT_DESC', 'Set the max height which is allowed for uploading images (in pixel)');
+\define('_MI_WGTEAMS_IMG_MAXWIDTH_IE', 'Maximum width image resizer');
+\define('_MI_WGTEAMS_IMG_MAXWIDTH_IE_DESC', 'Set the max width to which uploaded images should be resized (in pixel)<br>0 means that images keep original size<br>If original image is smaller the image will be not enlarged');
+\define('_MI_WGTEAMS_IMG_MAXHEIGHT_IE', 'Maximum height image resizer');
+\define('_MI_WGTEAMS_IMG_MAXHEIGHT_IE_DESC', 'Set the max height to which uploaded images should be resized (in pixel)<br>0 means that images keep original size<br>If original image is smaller the image will be not enlarged');
 \define('_MI_WGTEAMS_STARTPAGE', 'Start page');
 \define('_MI_WGTEAMS_STARTPAGE_DESC', 'Define, what should be shown when calling the module (index.php)');
 \define('_MI_WGTEAMS_STARTPAGE_LIST', 'An overview with all teams (but without members)');
@@ -86,6 +86,14 @@ require_once __DIR__ . '/common.php';
 \define('_MI_WGTEAMS_USEDETAILS_NONE', 'Do not use feature details. All information will be always shown');
 \define('_MI_WGTEAMS_USEDETAILS_TAB', 'Show details on new tab');
 \define('_MI_WGTEAMS_USEDETAILS_MODAL', 'Show details on modal window');
+//version 2.1.0
+\define('_MI_WGTEAMS_GROUP_GENERAL', 'General preferences');
+\define('_MI_WGTEAMS_GROUP_UPLOAD', 'Upload preferences');
+//\define('_MI_WGTEAMS_GROUP_DISPLAY', 'Display preferences');
+\define('_MI_WGTEAMS_GROUP_UI', 'UI preferences');
+\define('_MI_WGTEAMS_GROUP_OTHERS', 'Misc preferences');
+\define('_MI_WGTEAMS_SHOW_TAB_CLONE', 'Show tab "Clone" on dashboard page');
+\define('_MI_WGTEAMS_SHOW_TAB_FEEDBACK', 'Show tab "Feedback" on dashboard page');
 // ---------------- End ----------------
 
 

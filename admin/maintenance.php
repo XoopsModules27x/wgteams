@@ -26,7 +26,7 @@ use XoopsModules\Wgteams\{
     Helper
 };
 
-require __DIR__ . '/header.php';
+require_once __DIR__ . '/header.php';
 
 $op    = Request::getString('op', 'list');
 
@@ -77,11 +77,13 @@ switch ($op) {
         break;
     case 'delete_unused_image':
         $del_img_path = Request::getString('del_img_path', 'none');
-        if (1 == Request::getInt('ok', 0)) {
+        if (1 == Request::getInt('ok')) {
             if (!$GLOBALS['xoopsSecurity']->check()) {
                 \redirect_header('maintenance.php', 3, \implode(', ', $GLOBALS['xoopsSecurity']->getErrors()));
             }
-            \unlink($del_img_path);
+            if (\is_file($del_img_path)) {
+                \unlink($del_img_path);
+            }
             if (\file_exists($del_img_path)) {
                 \redirect_header('maintenance.php?op=unused_images_search', 2, _AM_WGTEAMS_MAINTENANCE_ERROR_DELETE . $del_img_path);
             } else {
@@ -94,7 +96,6 @@ switch ($op) {
 
     case 'check_space':
         $success = [];
-        $errors  = [];
 
         $path      = \WGTEAMS_UPLOAD_PATH . '/teams/images';
         $disk_used = wgg_foldersize($path);
@@ -108,13 +109,6 @@ switch ($op) {
 
         $templateMain = 'wgteams_admin_maintenance.tpl';
         $err_text     = '';
-        if (\count($errors) > 0) {
-            $err_text = '<ul>';
-            foreach ($errors as $error) {
-                $err_text .= '<li>' . $error . '</li>';
-            }
-            $err_text .= '</ul>';
-        }
         if (\count($success) > 0) {
             $success_text = '<ul>';
             foreach ($success as $s) {
@@ -124,7 +118,6 @@ switch ($op) {
         }
 
         $GLOBALS['xoopsTpl']->assign('result_success', $success_text);
-        $GLOBALS['xoopsTpl']->assign('result_error', $err_text);
         $GLOBALS['xoopsTpl']->assign('show_checkspace', true);
         $GLOBALS['xoopsTpl']->assign('show_result', true);
         break;
@@ -140,34 +133,14 @@ switch ($op) {
 }
 
 /**
- * @param $val
- * @return float|int
- */
-function returnCleanBytes($val)
-{
-    switch (mb_substr($val, -1)) {
-        case 'K':
-        case 'k':
-            return (int)$val * 1024;
-        case 'M':
-        case 'm':
-            return (int)$val * 1048576;
-        case 'G':
-        case 'g':
-            return (int)$val * 1073741824;
-        default:
-            return $val;
-    }
-}
-
-/**
  * get unused images of given directory
  * @param array $unused
  * @param string $directory
- * @param $url
+ * @param string $url
  * @return bool
+ * @throws Exception
  */
-function getUnusedImages(&$unused, $directory, $url)
+function getUnusedImages(array &$unused, string $directory, string $url): bool
 {
     // Get instance of module
     $helper        = Helper::getInstance();
@@ -221,7 +194,7 @@ function getUnusedImages(&$unused, $directory, $url)
  * @param string $path
  * @return int
  */
-function wgg_foldersize($path)
+function wgg_foldersize(string $path): int
 {
     $total_size = 0;
     $files      = \scandir($path);
@@ -247,7 +220,7 @@ function wgg_foldersize($path)
  * @param int $size
  * @return string
  */
-function wgg_format_size($size)
+function wgg_format_size(int $size): string
 {
     $mod   = 1024;
     $units = \explode(' ', 'B KB MB GB TB PB');
@@ -258,4 +231,4 @@ function wgg_format_size($size)
     return \round($size, 2) . ' ' . $units[$i];
 }
 
-require __DIR__ . '/footer.php';
+require_once __DIR__ . '/footer.php';

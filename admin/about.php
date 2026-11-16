@@ -19,8 +19,8 @@ declare(strict_types=1);
  * @package         wgteams
  * @author          Goffy - Wedega.com - Email:<webmaster@wedega.com> - Website:<https://wedega.com>
  */
-require __DIR__ . '/header.php';
+require_once __DIR__ . '/header.php';
 $templateMain = 'wgteams_admin_about.tpl';
-$GLOBALS['xoopsTpl']->assign('navigation', $adminObject->displayNavigation('about.php'));
-$GLOBALS['xoopsTpl']->assign('about', $adminObject->displayAbout('', false));
-require __DIR__ . '/footer.php';
+$GLOBALS['xoopsTpl']->assign('navigation', $adminObject->renderNavigation('about.php'));
+$GLOBALS['xoopsTpl']->assign('about', $adminObject->renderAbout(''));
+require_once __DIR__ . '/footer.php';

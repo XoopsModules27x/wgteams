@@ -54,37 +54,30 @@ class RelationsHandler extends \XoopsPersistableObjectHandler
      */
     public function create($isNew = true)
     {
-        $temp = parent::create($isNew);
-
-        return $temp;
+        return parent::create($isNew);
     }
 
     /**
      * retrieve a field
      *
-     * @param  int $i field id
-     * @param null $fields
-     * @return mixed reference to the <a href='psi_element://TDMCreateFields'>TDMCreateFields</a> object
-     *                object
+     * @param  int $id field id
+     * @param  $fields
+     * @return \XoopsObject
      */
-    public function get($i = null, $fields = null)
+    public function get($id = null, $fields = null): ?\XoopsObject
     {
-        $temp = parent::get($i, $fields);
-
-        return $temp;
+        return parent::get($id, $fields);
     }
 
     /**
      * get inserted id
      *
-     * @param null
+     *
      * @return int reference to the {@link TDMCreateFields} object
      */
-    public function getInsertId()
+    public function getInsertId(): int
     {
-        $temp = $this->db->getInsertId();
-
-        return $temp;
+        return $this->db->getInsertId();
     }
 
     /**
@@ -94,7 +87,7 @@ class RelationsHandler extends \XoopsPersistableObjectHandler
      *                                   to match
      * @return array  of object IDs
      */
-    public function &getIds(?\CriteriaElement $criteria = null)
+    public function &getIds(?\CriteriaElement $criteria = null): array
     {
         $temp = &parent::getIds($criteria);
 
@@ -104,15 +97,15 @@ class RelationsHandler extends \XoopsPersistableObjectHandler
     /**
      * insert a new field in the database
      *
-     * @param \XoopsObject $field reference to the {@link TDMCreateFields}
+     * @param \XoopsObject $object reference to the {@link TDMCreateFields}
      *                            object
      * @param bool         $force
      *
      * @return bool FALSE if failed, TRUE if already present and unchanged or successful
      */
-    public function insert(\XoopsObject $field, $force = false)
+    public function insert(\XoopsObject $object, $force = false): bool
     {
-        if (!parent::insert($field, $force)) {
+        if (!parent::insert($object, $force)) {
             return false;
         }
 
@@ -121,13 +114,13 @@ class RelationsHandler extends \XoopsPersistableObjectHandler
 
     /**
      * Get Count Relations
-     * @param int    $start
-     * @param int    $limit
+     * @param int $start
+     * @param int $limit
      * @param string $sort
      * @param string $order
      * @return int
      */
-    public function getCountRelations($start = 0, $limit = 0, $sort = 'rel_id', $order = 'ASC')
+    public function getCountRelations(int $start = 0, int $limit = 0, string $sort = 'rel_id', string $order = 'ASC'): int
     {
         $criteria = new \CriteriaCompo();
         $criteria->setSort($sort);
@@ -143,7 +136,7 @@ class RelationsHandler extends \XoopsPersistableObjectHandler
      * @param int $team_id
      * @return int
      */
-    public function getCountRelationsTeam($team_id = 0)
+    public function getCountRelationsTeam(int $team_id = 0): int
     {
         $criteria = new \CriteriaCompo();
         $criteria->add(new \Criteria('rel_team_id', $team_id));
@@ -153,13 +146,13 @@ class RelationsHandler extends \XoopsPersistableObjectHandler
 
     /**
      * Get All Relations
-     * @param int    $start
-     * @param int    $limit
+     * @param int $start
+     * @param int $limit
      * @param string $sort
      * @param string $order
      * @return array
      */
-    public function getAllRelations($start = 0, $limit = 0, $sort = 'rel_team_id ASC, rel_weight ASC, rel_id', $order = 'ASC')
+    public function getAllRelations(int $start = 0, int $limit = 0, string $sort = 'rel_team_id ASC, rel_weight ASC, rel_id', string $order = 'ASC'): array
     {
         $criteria = new \CriteriaCompo();
         $criteria->setSort($sort);

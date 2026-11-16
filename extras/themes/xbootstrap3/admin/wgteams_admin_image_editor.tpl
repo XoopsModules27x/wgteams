@@ -14,7 +14,7 @@
             <div class='tab-pane active center' id='1'>
                 <img id='currentImg' class='img-responsive imageeditor-img center' src='<{$imgCurrent.src|default:''}>' alt='<{$imgCurrent.img_name|default:''}>'>
                 <p><{$smarty.const._AM_WGTEAMS_IMG_EDITOR_CURRENT2}>: <{$image_path|default:''}><br>
-                <{$smarty.const._AM_WGTEAMS_IMG_EDITOR_RESXY}>: <{$albimage_width|default:''}> / <{$albimage_height|default:''}></p>
+                <{$smarty.const._AM_WGTEAMS_IMG_EDITOR_RESXY}>: <{$image_width|default:''}> / <{$image_height|default:''}></p>
                 <input type='button' class='btn <{$btn_style|default:''}>' value='<{$smarty.const._CANCEL}>' onclick='history.go(-1);return true;'>
             </div>
             

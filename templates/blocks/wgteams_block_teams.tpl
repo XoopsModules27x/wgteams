@@ -15,14 +15,14 @@
                 <{/if}> 
                     <div class='wgt-card'>
                         <{if $team.team_image|default:false}>
-                            <a class='' href='<{$wgteams_url_index}>?op=list&amp;team_id=<{$team.team_id}>' title='<{$smarty.const._MB_WGTEAMS_SHOWTEAM}>'>
+                            <a class='' href='<{$wgteams_url_index}>?op=list&team_id=<{$team.team_id}>' title='<{$smarty.const._MB_WGTEAMS_SHOWTEAM}>'>
                                 <img class="wgt-card-img img-fluid center <{$team.team_imagestyle|default:''}>" src="<{$wgteams_teams_upload_url}><{$team.team_image}>" alt="<{$team.team_name}>" title="<{$team.team_name}>"></a>
                         <{/if}>
                         <div class="wgt-car-body">
                             <{if $showName}><h5 class="team-name center"><{$team.team_name}></h5><{/if}>
                             <{if $showDesc}><p class="team-descr"><{$team.team_descr}></p><{/if}>
                             <p class="center">
-                                <a class='btn btn-primary' href='<{$wgteams_url_index}>?op=list&amp;team_id=<{$team.team_id}>' title='<{$smarty.const._MB_WGTEAMS_SHOWTEAM}>'><{$smarty.const._MB_WGTEAMS_SHOWTEAM}></a>
+                                <a class='btn btn-primary' href='<{$wgteams_url_index}>?op=list&team_id=<{$team.team_id}>' title='<{$smarty.const._MB_WGTEAMS_SHOWTEAM}>'><{$smarty.const._MB_WGTEAMS_SHOWTEAM}></a>
                             </p>
                         </div>
                     </div>
@@ -35,7 +35,7 @@
             <ul class="nav nav-pills nav-stacked">
                 <{foreach name=team item=team from=$block}>
                     <li class='wgt-list-item'>
-                        <a class='' href='<{$wgteams_url_index}>?op=list&amp;team_id=<{$team.team_id}>' title='<{$smarty.const._MB_WGTEAMS_SHOWTEAM}>'>
+                        <a class='' href='<{$wgteams_url_index}>?op=list&team_id=<{$team.team_id}>' title='<{$smarty.const._MB_WGTEAMS_SHOWTEAM}>'>
                             <{if $team.team_image|default:false}>
                                 <img class="wgt-list-img <{$team.team_imagestyle|default:''}>" src="<{$wgteams_teams_upload_url}><{$team.team_image}>" alt="<{$team.team_name}>" title="<{$team.team_name}>">
                             <{/if}>

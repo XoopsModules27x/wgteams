@@ -29,8 +29,9 @@ class Modulemenu
      *
      * @param bool $includeUrl
      * @return array
+     * @throws \Exception
      */
-    public function getMenuitemsDefault($includeUrl = false)
+    public function getMenuitemsDefault(bool $includeUrl = false): array
     {
 
         $moduleDirName = \basename(\dirname(__DIR__));
@@ -69,8 +70,9 @@ class Modulemenu
     /** function to create a list of nested sublinks
      *
      * @return array
+     * @throws \Exception
      */
-    public function getMenuitemsSbadmin5()
+    public function getMenuitemsSbadmin5(): array
     {
         return $this->getMenuitemsDefault(true);
     }

@@ -12,6 +12,8 @@ namespace XoopsModules\Wgteams;
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
+defined('XOOPS_ROOT_PATH') || exit('Restricted access');
+
 /**
  * wgGallery module for xoops
  *
@@ -86,7 +88,9 @@ class Resizer
             // Copy and resize old image into new image.
             \imagecopyresampled($tmpimg, $img, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
 
-            \unlink($this->endFile);
+            if (\is_file($this->endFile)) {
+                \unlink($this->endFile);
+            }
             //compressing the file
             switch ($this->imageMimetype) {
                 case'image/png':
@@ -100,12 +104,9 @@ class Resizer
                     break;
             }
 
-            // release the memory
-            \imagedestroy($tmpimg);
         } else {
             return 'copy';
         }
-        \imagedestroy($img);
 
         return true;
     }
@@ -182,7 +183,7 @@ class Resizer
     }
 
     // public function mergeImage($this->sourceFile, $this->endFile, $this->mergePos, $this->mergeType)
-    public function mergeImage()
+    public function mergeImage(): void
     {
         $dest = \imagecreatefromjpeg($this->endFile);
         $src  = \imagecreatefromjpeg($this->sourceFile);
@@ -235,8 +236,5 @@ class Resizer
             }
         }
         \imagejpeg($dest, $this->endFile);
-
-        \imagedestroy($src);
-        \imagedestroy($dest);
     }
 }

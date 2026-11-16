@@ -37,14 +37,15 @@ $helper->loadLanguage('common');
 
 switch ($op) {
     case 'load':
-        if (1 == Request::getInt('ok', 0)) {
+        if (1 == Request::getInt('ok')) {
             if (!$GLOBALS['xoopsSecurity']->check()) {
                 \redirect_header('../admin/index.php', 3, \implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
             }
             loadSampleData();
         } else {
             xoops_cp_header();
-            xoops_confirm(['ok' => 1, 'op' => 'load'], 'index.php', \_CO_WGTEAMS_ADD_SAMPLEDATA_OK, \_CO_WGTEAMS_CONFIRM);
+            echo '<div style="margin-bottom:30px;">&nbsp;</div>';
+            xoops_confirm(['ok' => 1, 'op' => 'load'], 'index.php', \_CO_WGTEAMS_LOAD_SAMPLEDATA_SUCCESS, \_CO_WGTEAMS_CONFIRM);
             xoops_cp_footer();
         }
         break;
@@ -55,7 +56,7 @@ switch ($op) {
 
 // XMF TableLoad for SAMPLE data
 
-function loadSampleData()
+function loadSampleData(): void
 {
     global $xoopsConfig;
 
@@ -86,7 +87,7 @@ function loadSampleData()
     loadTableFromArrayWithReplace($table, $tabledata, 'gperm_modid', $mid);
 
     //  ---  COPY test folder files ---------------
-    if (\is_array($configurator->copyTestFolders) && \count($configurator->copyTestFolders) > 0) {
+    if (\count($configurator->copyTestFolders) > 0) {
         //        $file =  dirname(__DIR__) . '/testdata/images/';
         foreach (\array_keys($configurator->copyTestFolders) as $i) {
             $src  = $configurator->copyTestFolders[$i][0];
@@ -94,10 +95,10 @@ function loadSampleData()
             $utility::rcopy($src, $dest);
         }
     }
-    \redirect_header('../admin/index.php', 1, \_CO_WGTEAMS_SAMPLEDATA_SUCCESS);
+    \redirect_header('../admin/index.php', 1, \_CO_WGTEAMS_LOAD_SAMPLEDATA_SUCCESS);
 }
 
-function saveSampleData()
+function saveSampleData(): void
 {
     global $xoopsConfig;
 
@@ -128,7 +129,7 @@ function saveSampleData()
     unset($criteria);
 
     //  ---  COPY test folder files ---------------
-    if (\is_array($configurator->copyTestFolders) && \count($configurator->copyTestFolders) > 0) {
+    if (\count($configurator->copyTestFolders) > 0) {
         foreach (\array_keys($configurator->copyTestFolders) as $i) {
             $src  = $configurator->copyTestFolders[$i][1];
             $dest = $configurator->copyTestFolders[$i][0];
@@ -138,7 +139,7 @@ function saveSampleData()
     \redirect_header('../admin/index.php', 1, \_CO_WGTEAMS_SAVE_SAMPLEDATA_SUCCESS);
 }
 
-function exportSchema()
+function exportSchema(): void
 {
     $moduleDirName      = \basename(\dirname(__DIR__));
     $moduleDirNameUpper = \mb_strtoupper($moduleDirName);
@@ -158,18 +159,19 @@ function exportSchema()
 /**
  * loadTableFromArrayWithReplace
  *
- * @param string $table  value with should be used insead of original value of $search
+ * @param string $table value with should be used insead of original value of $search
  *
- * @param array  $data   array of rows to insert
+ * @param array $data array of rows to insert
  *                       Each element of the outer array represents a single table row.
  *                       Each row is an associative array in 'column' => 'value' format.
  * @param string $search name of column for which the value should be replaced
- * @param        $replace
+ * @param string $replace
  * @return int number of rows inserted
+ * @throws Exception
  */
-function loadTableFromArrayWithReplace($table, $data, $search, $replace)
+function loadTableFromArrayWithReplace(string $table, array $data, string $search, string $replace): int
 {
-    /** @var \XoopsDatabase */
+    /** @var \XoopsDatabase $db */
     $db = \XoopsDatabaseFactory::getDatabaseConnection();
 
     $prefixedTable = $db->prefix($table);

@@ -79,7 +79,7 @@ class Helper extends \Xmf\Module\Helper
 
     /**
      * @static function getModule
-     * @param null
+     *
      * @return string
      */
     public function &getModule()
@@ -94,10 +94,10 @@ class Helper extends \Xmf\Module\Helper
     /**
      * @static function getConfig
      * @param string $name
-     * @param int    $index
+     * @param int    $default
      * @return mixed
      */
-    public function getConfig($name = null, $index = -1)
+    public function getConfig($name = null, $default = -1)
     {
         if (null === $this->config) {
             $this->initConfig();
@@ -108,22 +108,22 @@ class Helper extends \Xmf\Module\Helper
             return $this->config;
         }
         if (!isset($this->config[$name])) {
-            $this->addLog("ERROR :: CONFIG '{$name}' does not exist");
+            $this->addLog("ERROR :: CONFIG '$name' does not exist");
 
             return null;
         }
         if (\is_array($this->config[$name])) {
             if ($index > -1) {
-                $this->addLog("Getting config '{$name}' : " . $this->config[$name][$index]);
+                $this->addLog("Getting config '$name' : " . $this->config[$name][$index]);
 
                 return $this->config[$name][$index];
             }
-            $this->addLog("Getting config '{$name}' : array " . $name);
+            $this->addLog("Getting config '$name' : array " . $name);
 
             return $this->config[$name];
         }
 
-        $this->addLog("Getting config '{$name}' : " . $this->config[$name]);
+        $this->addLog("Getting config '$name' : " . $this->config[$name]);
 
         return $this->config[$name];
     }
@@ -140,7 +140,7 @@ class Helper extends \Xmf\Module\Helper
             $this->initConfig();
         }
         $this->config[$name] = $value;
-        $this->addLog("Setting config '{$name}' : " . $this->config[$name]);
+        $this->addLog("Setting config '$name' : " . $this->config[$name]);
 
         return $this->config[$name];
     }
@@ -149,6 +149,7 @@ class Helper extends \Xmf\Module\Helper
      * @static function getHandler
      * @param string $name
      * @return mixed
+     * @throws \Exception
      */
     public function getHandler($name)
     {
@@ -161,13 +162,13 @@ class Helper extends \Xmf\Module\Helper
         $db  = \XoopsDatabaseFactory::getDatabaseConnection();
         $ret = new $class($db);
 
-        $this->addLog("Getting handler '{$name}'");
+        $this->addLog("Getting handler '$name'");
         return $ret;
     }
 
     /**
      * @static function initModule
-     * @param null
+     *
      */
     public function initModule()
     {
@@ -183,7 +184,7 @@ class Helper extends \Xmf\Module\Helper
 
     /**
      * @static function initConfig
-     * @param null
+     *
      */
     public function initConfig()
     {
@@ -195,6 +196,8 @@ class Helper extends \Xmf\Module\Helper
     /**
      * @static function initHandler
      * @param string $name
+     * @throws \Exception
+     * @throws \Exception
      */
     public function initHandler($name)
     {

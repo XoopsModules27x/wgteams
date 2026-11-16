@@ -52,39 +52,32 @@ class InfofieldsHandler extends \XoopsPersistableObjectHandler
      *
      * @return \XoopsObject
      */
-    public function create($isNew = true)
+    public function create($isNew = true): \XoopsObject
     {
-        $temp = parent::create($isNew);
-
-        return $temp;
+        return parent::create($isNew);
     }
 
     /**
      * retrieve a field
      *
-     * @param  int $i field id
-     * @param null $fields
-     * @return mixed reference to the <a href='psi_element://TDMCreateFields'>TDMCreateFields</a> object
-     *                object
+     * @param $id
+     * @param $fields
+     * @return \XoopsObject
      */
-    public function get($i = null, $fields = null)
+    public function get($id = null, $fields = null): ?\XoopsObject
     {
-        $temp = parent::get($i, $fields);
-
-        return $temp;
+        return parent::get($id, $fields);
     }
 
     /**
      * get inserted id
      *
-     * @param null
+     *
      * @return int reference to the {@link TDMCreateFields} object
      */
-    public function getInsertId()
+    public function getInsertId(): int
     {
-        $temp = $this->db->getInsertId();
-
-        return $temp;
+        return $this->db->getInsertId();
     }
 
     /**
@@ -94,7 +87,7 @@ class InfofieldsHandler extends \XoopsPersistableObjectHandler
      *                                   to match
      * @return array  of object IDs
      */
-    public function &getIds(?\CriteriaElement $criteria = null)
+    public function &getIds(?\CriteriaElement $criteria = null): array
     {
         $temp = &parent::getIds($criteria);
 
@@ -104,15 +97,15 @@ class InfofieldsHandler extends \XoopsPersistableObjectHandler
     /**
      * insert a new field in the database
      *
-     * @param \XoopsObject $field reference to the {@link TDMCreateFields}
+     * @param \XoopsObject $object reference to the {@link TDMCreateFields}
      *                            object
      * @param bool         $force
      *
      * @return bool FALSE if failed, TRUE if already present and unchanged or successful
      */
-    public function insert(\XoopsObject $field, $force = false)
+    public function insert(\XoopsObject $object, $force = false): bool
     {
-        if (!parent::insert($field, $force)) {
+        if (!parent::insert($object, $force)) {
             return false;
         }
 
@@ -121,13 +114,13 @@ class InfofieldsHandler extends \XoopsPersistableObjectHandler
 
     /**
      * Get Count Infofields
-     * @param int    $start
-     * @param int    $limit
+     * @param int $start
+     * @param int $limit
      * @param string $sort
      * @param string $order
      * @return int
      */
-    public function getCountInfofields($start = 0, $limit = 0, $sort = 'infofield_id ASC, infofield_name', $order = 'ASC')
+    public function getCountInfofields(int $start = 0, int $limit = 0, string $sort = 'infofield_id ASC, infofield_name', string $order = 'ASC'): int
     {
         $criteria = new \CriteriaCompo();
         $criteria->setSort($sort);
@@ -140,13 +133,13 @@ class InfofieldsHandler extends \XoopsPersistableObjectHandler
 
     /**
      * Get All Infofields
-     * @param int    $start
-     * @param int    $limit
+     * @param int $start
+     * @param int $limit
      * @param string $sort
      * @param string $order
      * @return array
      */
-    public function getAllInfofields($start = 0, $limit = 0, $sort = 'infofield_id ASC, infofield_name', $order = 'ASC')
+    public function getAllInfofields(int $start = 0, int $limit = 0, string $sort = 'infofield_id ASC, infofield_name', string $order = 'ASC'): array
     {
         $criteria = new \CriteriaCompo();
         $criteria->setSort($sort);

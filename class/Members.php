@@ -71,7 +71,7 @@ class Members extends \XoopsObject
      * @param mixed $action
      * @return \XoopsThemeForm
      */
-    public function getFormMembers($action = false)
+    public function getFormMembers($action = false): \XoopsThemeForm
     {
         global $xoopsUser;
 
@@ -79,7 +79,7 @@ class Members extends \XoopsObject
             $action = $_SERVER['REQUEST_URI'];
         }
         // Title
-        $title = $this->isNew() ? \sprintf(_AM_WGTEAMS_MEMBER_ADD) : \sprintf(_AM_WGTEAMS_MEMBER_EDIT);
+        $title = $this->isNew() ? _AM_WGTEAMS_MEMBER_ADD : _AM_WGTEAMS_MEMBER_EDIT;
         // Get Theme Form
         \xoops_load('XoopsFormLoader');
         $form = new \XoopsThemeForm($title, 'form', $action, 'post', true);
@@ -124,22 +124,22 @@ class Members extends \XoopsObject
             $imageSelect->addOption($image, $image);
         }
         $imageSelect->setExtra("onchange='showImgSelected(\"image2\", \"member_image\", \"" . $imageDirectory . '", "", "' . \XOOPS_URL . "\")'");
-        $imageTray->addElement($imageSelect, false);
+        $imageTray->addElement($imageSelect);
         $imageTray->addElement(new \XoopsFormLabel('', "<br><img src='" . \XOOPS_URL . '/' . $imageDirectory . '/' . $memberImage . "' name='image2' id='image2' alt='' style='max-width:100px;' />"));
         // Form File
         $fileSelectTray = new \XoopsFormElementTray('', '<br>');
-        $fileSelectTray->addElement(new \XoopsFormFile(_AM_WGTEAMS_FORM_UPLOAD_IMG, 'attachedfile', $this->helper->getConfig('wgteams_img_maxsize')));
+        $fileSelectTray->addElement(new \XoopsFormFile(_AM_WGTEAMS_FORM_UPLOAD_IMG, 'attachedfile', $this->helper->getConfig('img_maxsize')));
 
-        $cond = '<br>- ' . _MI_WGTEAMS_IMG_MAXSIZE . ': ' . ($this->helper->getConfig('wgteams_img_maxsize') / 1048576) . ' ' . _MI_WGTEAMS_SIZE_MB;
-        $cond .= '<br>- ' . _MI_WGTEAMS_MAXWIDTH . ': ' . $this->helper->getConfig('maxwidth') . ' px';
-        $cond .= '<br>- ' . _MI_WGTEAMS_MAXHEIGHT . ': ' . $this->helper->getConfig('maxheight') . ' px';
-        $cond .= '<br>- ' . _MI_WGTEAMS_IMG_MIMETYPES . ': ' . \implode(', ', $this->helper->getConfig('wgteams_img_mimetypes'));
+        $cond = '<br>- ' . _MI_WGTEAMS_IMG_MAXSIZE . ': ' . ($this->helper->getConfig('img_maxsize') / 1048576) . ' ' . _MI_WGTEAMS_SIZE_MB;
+        $cond .= '<br>- ' . _MI_WGTEAMS_IMG_MAXWIDTH . ': ' . $this->helper->getConfig('img_maxwidth') . ' px';
+        $cond .= '<br>- ' . _MI_WGTEAMS_IMG_MAXHEIGHT . ': ' . $this->helper->getConfig('img_maxheight') . ' px';
+        $cond .= '<br>- ' . _MI_WGTEAMS_IMG_MIMETYPES . ': ' . \implode(', ', $this->helper->getConfig('img_mimetypes'));
         $fileSelectTray->addElement(new \XoopsFormLabel(_AM_WGTEAMS_IMG_EDITOR_UPLOAD, $cond));
         $imageTray->addElement($fileSelectTray);
 
         $imageTray3   = new \XoopsFormElementTray('', '');
-        $resizeinfo = '<br>' . \str_replace('%w', $this->helper->getConfig('maxwidth_imgeditor'), _AM_WGTEAMS_IMG_EDITOR_RESIZE_DESC);
-        $resizeinfo = \str_replace('%h', $this->helper->getConfig('maxheight_imgeditor'), $resizeinfo);
+        $resizeinfo = '<br>' . \str_replace('%w', $this->helper->getConfig('img_maxwidth_ie'), _AM_WGTEAMS_IMG_EDITOR_RESIZE_DESC);
+        $resizeinfo = \str_replace('%h', $this->helper->getConfig('img_maxheight_ie'), $resizeinfo);
         $imageTray3->addElement(new \XoopsFormLabel($resizeinfo, ''));
         $imageTray3->addElement(new \XoopsFormRadioYN('', 'img_resize', 1));
         $imageTray->addElement($imageTray3);
@@ -159,12 +159,12 @@ class Members extends \XoopsObject
 
     /**
      * Get Values
-     * @param null $keys
-     * @param null $format
-     * @param null $maxDepth
+     * @param $keys
+     * @param $format
+     * @param $maxDepth
      * @return array
      */
-    public function getValuesMember($keys = null, $format = null, $maxDepth = null)
+    public function getValuesMember($keys = null, $format = null, $maxDepth = null): array
     {
         $helper             = Helper::getInstance();
         $ret                = $this->getValues($keys, $format, $maxDepth);
@@ -187,7 +187,7 @@ class Members extends \XoopsObject
      *
      * @return array
      **/
-    public function toArray()
+    public function toArray(): array
     {
         $ret  = [];
         $vars = &$this->getVars();

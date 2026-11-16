@@ -37,8 +37,8 @@ $modversion = [
     'module_status'       => 'Beta1',
     'release'             => '2026/11/13', // format: yyyy/mm/dd
     'release_date'        => '2026/11/13', // format: yyyy/mm/dd
-    'name'                => _MI_WGTEAMS_NAME,
-    'description'         => _MI_WGTEAMS_DESC,
+    'name'                => \_MI_WGTEAMS_NAME,
+    'description'         => \_MI_WGTEAMS_DESC,
     'author'              => 'Goffy - Wedega.com',
     'author_mail'         => 'webmaster@wedega.com',
     'author_website_url'  => 'https://wedega.com',
@@ -139,8 +139,8 @@ if (\is_object($xoopsModule) && $xoopsModule->getVar('dirname') == $moduleDirNam
 // ------------------- Blocks ------------------- //
 $modversion['blocks'][] = [
     'file'        => 'b_teams.php',
-    'name'        => _MI_WGTEAMS_TEAMS_BLOCK,
-    'description' => _MI_WGTEAMS_TEAMS_BLOCK_DESC,
+    'name'        => \_MI_WGTEAMS_TEAMS_BLOCK,
+    'description' => \_MI_WGTEAMS_TEAMS_BLOCK_DESC,
     'show_func'   => 'b_wgteams_teams_show',
     'edit_func'   => 'b_wgteams_teams_edit',
     'options'     => 'showlistofteams|1|0|1|0|default|1|0',
@@ -149,8 +149,8 @@ $modversion['blocks'][] = [
 
 $modversion['blocks'][] = [
     'file'        => 'b_teamsmembers_extended.php',
-    'name'        => _MI_WGTEAMS_TEAMSMEMBERS_BLOCK_EXTENDED,
-    'description' => _MI_WGTEAMS_TEAMSMEMBERS_BLOCK_EXTENDED_DESC,
+    'name'        => \_MI_WGTEAMS_TEAMSMEMBERS_BLOCK_EXTENDED,
+    'description' => \_MI_WGTEAMS_TEAMSMEMBERS_BLOCK_EXTENDED_DESC,
     'show_func'   => 'b_wgteams_teamsmembers_ext_show',
     'edit_func'   => 'b_wgteams_teamsmembers_ext_edit',
     'options'     => 'showtmextended|0|0|0|0|1|0',
@@ -160,8 +160,8 @@ $modversion['blocks'][] = [
 // ------------------- Blocks ------------------- //
 $modversion['blocks'][] = [
     'file'        => 'b_teamsmembers.php',
-    'name'        => _MI_WGTEAMS_TEAMSMEMBERS_BLOCK,
-    'description' => _MI_WGTEAMS_TEAMSMEMBERS_BLOCK_DESC,
+    'name'        => \_MI_WGTEAMS_TEAMSMEMBERS_BLOCK,
+    'description' => \_MI_WGTEAMS_TEAMSMEMBERS_BLOCK_DESC,
     'show_func'   => 'b_wgteams_teamsmembers_show',
     'edit_func'   => 'b_wgteams_teamsmembers_edit',
     'options'     => 'showteamsmembers|0',
@@ -169,6 +169,16 @@ $modversion['blocks'][] = [
 ];
 
 // ------------------- Config ------------------- //
+// ------------------- Group header: General ------------------- //
+$modversion['config'][] = [
+    'name'        => 'group_general',
+    'title'       => '_MI_WGTEAMS_GROUP_GENERAL',
+    'description' => '',
+    'formtype'    => 'line_break',
+    'valuetype'   => 'textbox',
+    'default'     => 'even',
+    'category'    => 'group_header',
+];
 $modversion['config'][] = [
     'name'        => 'keywords',
     'title'       => '_MI_WGTEAMS_KEYWORDS',
@@ -187,26 +197,6 @@ $modversion['config'][] = [
     'default'     => 10,
 ];
 
-$modversion['config'][] = [
-    'name'        => 'userpager',
-    'title'       => '_MI_WGTEAMS_USER_PAGER',
-    'description' => '_MI_WGTEAMS_USER_PAGER_DESC',
-    'formtype'    => 'textbox',
-    'valuetype'   => 'int',
-    'default'     => 10,
-];
-
-// start page for module
-$modversion['config'][] = [
-    'name'        => 'startpage',
-    'title'       => '_MI_WGTEAMS_STARTPAGE',
-    'description' => '_MI_WGTEAMS_STARTPAGE_DESC',
-    'formtype'    => 'select',
-    'valuetype'   => 'array',
-    'default'     => 1,
-    'options'     => [_MI_WGTEAMS_STARTPAGE_LIST => 1, _MI_WGTEAMS_STARTPAGE_ALL => 2, _MI_WGTEAMS_STARTPAGE_FIRST => 3],
-];
-
 // Editor
 \xoops_load('xoopseditorhandler');
 $editorHandler          = \XoopsEditorHandler::getInstance();
@@ -220,11 +210,23 @@ $modversion['config'][] = [
     'default'     => 'dhtmltextarea',
 ];
 
+// ------------------- Group header: upload ------------------- //
+$modversion['config'][] = [
+    'name'        => 'group_upload',
+    'title'       => '_MI_WGTEAMS_GROUP_UPLOAD',
+    'description' => '',
+    'formtype'    => 'line_break',
+    'valuetype'   => 'textbox',
+    'default'     => 'even',
+    'category'    => 'group_header',
+];
+
 // Uploads : maxsize of image
 include_once __DIR__ . '/include/xoops_version.inc.php';
 $iniPostMaxSize = wgteamsReturnBytes(\ini_get('post_max_size'));
 $iniUploadMaxFileSize = wgteamsReturnBytes(\ini_get('upload_max_filesize'));
 $maxSize = min($iniPostMaxSize, $iniUploadMaxFileSize);
+$increment = 1;
 if ($maxSize > 10000 * 1048576) {
     $increment = 500;
 }
@@ -246,12 +248,6 @@ if ($maxSize <= 500 * 1048576){
 if ($maxSize <= 100 * 1048576){
     $increment = 2;
 }
-if ($maxSize <= 50 * 1048576){
-    $increment = 1;
-}
-if ($maxSize <= 25 * 1048576){
-    $increment = 0.5;
-}
 $optionMaxsize = [];
 $i = $increment;
 while ($i* 1048576 <= $maxSize) {
@@ -259,18 +255,18 @@ while ($i* 1048576 <= $maxSize) {
     $i += $increment;
 }
 $modversion['config'][] = [
-    'name' => 'wgteams_img_maxsize',
-    'title' => '_MI_WGTEAMS_IMG_MAXSIZE',
+    'name'        => 'img_maxsize',
+    'title'       => '_MI_WGTEAMS_IMG_MAXSIZE',
     'description' => '_MI_WGTEAMS_IMG_MAXSIZE_DESC',
-    'formtype' => 'select',
-    'valuetype' => 'int',
-    'default' => 3145728,
-    'options' => $optionMaxsize,
+    'formtype'    => 'select',
+    'valuetype'   => 'int',
+    'default'     => 3145728,
+    'options'     => $optionMaxsize,
 ];
 
 //Uploads : mimetypes of images
 $modversion['config'][] = [
-    'name'        => 'wgteams_img_mimetypes',
+    'name'        => 'img_mimetypes',
     'title'       => '_MI_WGTEAMS_IMG_MIMETYPES',
     'description' => '_MI_WGTEAMS_IMG_MIMETYPES_DESC',
     'formtype'    => 'select_multi',
@@ -289,9 +285,9 @@ $modversion['config'][] = [
 
 // Uploads : max width of images for upload
 $modversion['config'][] = [
-    'name'        => 'maxwidth',
-    'title'       => '_MI_WGTEAMS_MAXWIDTH',
-    'description' => '_MI_WGTEAMS_MAXWIDTH_DESC',
+    'name'        => 'img_maxwidth',
+    'title'       => '_MI_WGTEAMS_IMG_MAXWIDTH',
+    'description' => '_MI_WGTEAMS_IMG_MAXWIDTH_DESC',
     'formtype'    => 'textbox',
     'valuetype'   => 'int',
     'default'     => 1000,
@@ -299,18 +295,18 @@ $modversion['config'][] = [
 
 // Uploads : max height of images for upload
 $modversion['config'][] = [
-    'name'        => 'maxheight',
-    'title'       => '_MI_WGTEAMS_MAXHEIGHT',
-    'description' => '_MI_WGTEAMS_MAXHEIGHT_DESC',
+    'name'        => 'img_maxheight',
+    'title'       => '_MI_WGTEAMS_IMG_MAXHEIGHT',
+    'description' => '_MI_WGTEAMS_IMG_MAXHEIGHT_DESC',
     'formtype'    => 'textbox',
     'valuetype'   => 'int',
     'default'     => 1000,
 ];
 // Uploads : max width of images for upload
 $modversion['config'][] = [
-    'name'        => 'maxwidth_imgeditor',
-    'title'       => '_MI_WGTEAMS_MAXWIDTH_IMGEDITOR',
-    'description' => '_MI_WGTEAMS_MAXWIDTH_IMGEDITOR_DESC',
+    'name'        => 'img_maxwidth_ie',
+    'title'       => '_MI_WGTEAMS_IMG_MAXWIDTH_IE',
+    'description' => '_MI_WGTEAMS_IMG_MAXWIDTH_IE_DESC',
     'formtype'    => 'textbox',
     'valuetype'   => 'int',
     'default'     => 400,
@@ -318,12 +314,43 @@ $modversion['config'][] = [
 
 // Uploads : max height of images for upload
 $modversion['config'][] = [
-    'name'        => 'maxheight_imgeditor',
-    'title'       => '_MI_WGTEAMS_MAXHEIGHT_IMGEDITOR',
-    'description' => '_MI_WGTEAMS_MAXHEIGHT_IMGEDITOR_DESC',
+    'name'        => 'img_maxheight_ie',
+    'title'       => '_MI_WGTEAMS_IMG_MAXHEIGHT_IE',
+    'description' => '_MI_WGTEAMS_IMG_MAXHEIGHT_IE_DESC',
     'formtype'    => 'textbox',
     'valuetype'   => 'int',
     'default'     => 400,
+];
+
+// ------------------- Group header: UI ------------------- //
+$modversion['config'][] = [
+    'name'        => 'group_ui',
+    'title'       => '_MI_WGTEAMS_GROUP_UI',
+    'description' => '',
+    'formtype'    => 'line_break',
+    'valuetype'   => 'textbox',
+    'default'     => 'even',
+    'category'    => 'group_header',
+];
+
+// start page for module
+$modversion['config'][] = [
+    'name'        => 'startpage',
+    'title'       => '_MI_WGTEAMS_STARTPAGE',
+    'description' => '_MI_WGTEAMS_STARTPAGE_DESC',
+    'formtype'    => 'select',
+    'valuetype'   => 'array',
+    'default'     => 1,
+    'options'     => [_MI_WGTEAMS_STARTPAGE_LIST => 1, _MI_WGTEAMS_STARTPAGE_ALL => 2, _MI_WGTEAMS_STARTPAGE_FIRST => 3],
+];
+
+$modversion['config'][] = [
+    'name'        => 'userpager',
+    'title'       => '_MI_WGTEAMS_USER_PAGER',
+    'description' => '_MI_WGTEAMS_USER_PAGER_DESC',
+    'formtype'    => 'textbox',
+    'valuetype'   => 'int',
+    'default'     => 10,
 ];
 
 $modversion['config'][] = [
@@ -375,6 +402,7 @@ $modversion['config'][] = [
     'valuetype'   => 'int',
     'default'     => 1,
 ];
+
 // Show copyright
 $modversion['config'][] = [
     'name'        => 'show_copyright',
@@ -384,27 +412,44 @@ $modversion['config'][] = [
     'valuetype'   => 'int',
     'default'     => 1,
 ];
+
+// ------------------- Group header: others ------------------- //
+$modversion['config'][] = [
+    'name'        => 'group_others',
+    'title'       => '_MI_WGTEAMS_GROUP_OTHERS',
+    'description' => '',
+    'formtype'    => 'line_break',
+    'valuetype'   => 'textbox',
+    'default'     => 'even',
+    'category'    => 'group_header',
+];
+
 /**
  * Make Sample button visible?
  */
 $modversion['config'][] = [
     'name'        => 'displaySampleButton',
-    'title'       => '_CO_WGTEAMSSHOW_SAMPLE_BUTTON',
-    'description' => '_CO_WGTEAMSSHOW_SAMPLE_BUTTON_DESC',
+    'title'       => '_CO_WGTEAMS_SHOW_SAMPLE_BUTTON',
+    'description' => '_CO_WGTEAMS_SHOW_SAMPLE_BUTTON_DESC',
     'formtype'    => 'yesno',
     'valuetype'   => 'int',
     'default'     => 1,
 ];
-
-/**
- * Show Developer Tools?
- */
-/* $modversion['config'][] = [
-    'name'        => 'displayDeveloperTools',
-    'title'       => '_CO_WGTEAMSSHOW_DEV_TOOLS',
-    'description' => '_CO_WGTEAMSSHOW_DEV_TOOLS_DESC',
+// Make tab clone visible?
+$modversion['config'][] = [
+    'name'        => 'displayTabClone',
+    'title'       => '_MI_WGTEAMS_SHOW_TAB_CLONE',
+    'description' => '',
     'formtype'    => 'yesno',
     'valuetype'   => 'int',
-    'default'     => 0,
+    'default'     => 1,
 ];
- */
+// Make tab feedback visible?
+$modversion['config'][] = [
+    'name'        => 'displayTabFeedback',
+    'title'       => '_MI_WGTEAMS_SHOW_TAB_FEEDBACK',
+    'description' => '',
+    'formtype'    => 'yesno',
+    'valuetype'   => 'int',
+    'default'     => 1,
+];

@@ -25,6 +25,8 @@ declare(strict_types=1);
  * @param $userid
  */
 
+defined('XOOPS_ROOT_PATH') || exit('Restricted access');
+
 // search callback functions
 function wgteams_search($queryarray, $andor, $limit, $offset, $userid)
 {
@@ -54,4 +56,6 @@ function wgteams_search($queryarray, $andor, $limit, $offset, $userid)
         }
     }
     unset($i);
+
+    return $ret;
 }

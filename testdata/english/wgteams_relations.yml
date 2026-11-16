@@ -12,7 +12,7 @@
     rel_info_4: '8'
     rel_info_5_field: '0'
     rel_info_5: ''
-    rel_weight: '0'
+    rel_weight: '1'
     rel_submitter: '1'
     rel_date_create: '1717088973'
 -
@@ -29,7 +29,7 @@
     rel_info_4: '7'
     rel_info_5_field: '0'
     rel_info_5: ''
-    rel_weight: '0'
+    rel_weight: '2'
     rel_submitter: '1'
     rel_date_create: '1717088913'
 -
@@ -46,7 +46,7 @@
     rel_info_4: '4'
     rel_info_5_field: '0'
     rel_info_5: ''
-    rel_weight: '0'
+    rel_weight: '3'
     rel_submitter: '1'
     rel_date_create: '1717259939'
 -
@@ -63,7 +63,7 @@
     rel_info_4: '3'
     rel_info_5_field: '0'
     rel_info_5: ''
-    rel_weight: '0'
+    rel_weight: '4'
     rel_submitter: '1'
     rel_date_create: '1717259955'
 -
@@ -80,7 +80,7 @@
     rel_info_4: ''
     rel_info_5_field: '0'
     rel_info_5: ''
-    rel_weight: '0'
+    rel_weight: '1'
     rel_submitter: '1'
     rel_date_create: '1717260068'
 -
@@ -97,7 +97,7 @@
     rel_info_4: ''
     rel_info_5_field: '0'
     rel_info_5: ''
-    rel_weight: '0'
+    rel_weight: '2'
     rel_submitter: '1'
     rel_date_create: '1717260115'
 -
@@ -114,7 +114,7 @@
     rel_info_4: ''
     rel_info_5_field: '0'
     rel_info_5: ''
-    rel_weight: '0'
+    rel_weight: '3'
     rel_submitter: '1'
     rel_date_create: '1717260141'
 -
@@ -131,7 +131,7 @@
     rel_info_4: ''
     rel_info_5_field: '0'
     rel_info_5: ''
-    rel_weight: '0'
+    rel_weight: '4'
     rel_submitter: '1'
     rel_date_create: '1717260162'
 -
@@ -148,7 +148,7 @@
     rel_info_4: ''
     rel_info_5_field: '0'
     rel_info_5: ''
-    rel_weight: '0'
+    rel_weight: '1'
     rel_submitter: '1'
     rel_date_create: '1717260189'
 -
@@ -165,7 +165,7 @@
     rel_info_4: ''
     rel_info_5_field: '0'
     rel_info_5: ''
-    rel_weight: '0'
+    rel_weight: '2'
     rel_submitter: '1'
     rel_date_create: '1717260207'
 -
@@ -182,7 +182,7 @@
     rel_info_4: ''
     rel_info_5_field: '0'
     rel_info_5: ''
-    rel_weight: '0'
+    rel_weight: '3'
     rel_submitter: '1'
     rel_date_create: '1717260220'
 -
@@ -199,6 +199,6 @@
     rel_info_4: ''
     rel_info_5_field: '0'
     rel_info_5: ''
-    rel_weight: '0'
+    rel_weight: '4'
     rel_submitter: '1'
     rel_date_create: '1717260231'

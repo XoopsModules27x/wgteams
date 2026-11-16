@@ -11,7 +11,7 @@
         <{else}>
             <div>
         <{/if}>
-        <{if $useTab|default:false}><a href="<{$wgteams_url_index}>?team_id=<{$team.team_id}>&amp;rel_id=<{$member.member_id}>" class="member-link" alt="<{$member.member_name}>" title="<{$member.member_name}>" target="_blank"><{/if}>
+        <{if $useTab|default:false}><a href="<{$wgteams_url_index}>?team_id=<{$team.team_id}>&rel_id=<{$member.member_id}>" class="member-link" alt="<{$member.member_name}>" title="<{$member.member_name}>" target="_blank"><{/if}>
         <{if $member.rel_displaystyle|default:'' == 'left'}>
             <{include file='db:wgteams_member_left.tpl' member=$member}>
         <{elseif $member.rel_displaystyle|default:'' == 'right'}>

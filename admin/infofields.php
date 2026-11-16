@@ -22,23 +22,27 @@ declare(strict_types=1);
  */
 
 use Xmf\Request;
+use XoopsModules\Wgteams\Common;
 
-require __DIR__ . '/header.php';
-// It recovered the value of argument op in URL$
-$op = Request::getString('op', 'list');
-// Request infofield_id
+require_once __DIR__ . '/header.php';
+
+$op          = Request::getString('op', 'list');
 $infofieldId = Request::getInt('infofield_id');
+$start       = Request::getInt('start');
+$limit       = Request::getInt('limit', $helper->getConfig('adminpager'));
+
+$GLOBALS['xoopsTpl']->assign('start', $start);
+$GLOBALS['xoopsTpl']->assign('limit', $limit);
+
 // Switch options
 switch ($op) {
     case 'list':
     default:
-        $start        = Request::getInt('start');
-        $limit        = Request::getInt('limit', $helper->getConfig('adminpager'));
         $useDetails   = (int)$helper->getConfig('wgteams_usedetails');
         $templateMain = 'wgteams_admin_infofields.tpl';
-        $GLOBALS['xoopsTpl']->assign('navigation', $adminObject->displayNavigation('infofields.php'));
+        $GLOBALS['xoopsTpl']->assign('navigation', $adminObject->renderNavigation('infofields.php'));
         $adminObject->addItemButton(_AM_WGTEAMS_INFOFIELD_ADD, 'infofields.php?op=new');
-        $GLOBALS['xoopsTpl']->assign('buttons', $adminObject->displayButton('left', ''));
+        $GLOBALS['xoopsTpl']->assign('buttons', $adminObject->renderButton('left', ''));
         $infofieldsCount = $infofieldsHandler->getCountInfofields();
         $infofieldsAll   = $infofieldsHandler->getAllInfofields($start, $limit);
         $GLOBALS['xoopsTpl']->assign('infofields_count', $infofieldsCount);
@@ -63,8 +67,8 @@ switch ($op) {
     case 'new':
         $templateMain = 'wgteams_admin_infofields.tpl';
         $adminObject->addItemButton(_AM_WGTEAMS_INFOFIELDS_LIST, 'infofields.php', 'list');
-        $GLOBALS['xoopsTpl']->assign('navigation', $adminObject->displayNavigation('infofields.php'));
-        $GLOBALS['xoopsTpl']->assign('buttons', $adminObject->displayButton('left', ''));
+        $GLOBALS['xoopsTpl']->assign('navigation', $adminObject->renderNavigation('infofields.php'));
+        $GLOBALS['xoopsTpl']->assign('buttons', $adminObject->renderButton('left', ''));
         // Get Form
         $infofieldsObj = $infofieldsHandler->create();
         $form          = $infofieldsObj->getFormInfofields();
@@ -76,6 +80,9 @@ switch ($op) {
         }
         if (isset($infofieldId)) {
             $infofieldsObj = $infofieldsHandler->get($infofieldId);
+            if (!\is_object($infofieldsObj)) {
+                \redirect_header('infofields.php', 3, \_AM_WGTEAMS_INVALID_PARAM);
+            }
         } else {
             $infofieldsObj = $infofieldsHandler->create();
         }
@@ -99,29 +106,34 @@ switch ($op) {
         $templateMain = 'wgteams_admin_infofields.tpl';
         $adminObject->addItemButton(_AM_WGTEAMS_INFOFIELD_ADD, 'infofields.php?op=new');
         $adminObject->addItemButton(_AM_WGTEAMS_INFOFIELDS_LIST, 'infofields.php', 'list');
-        $GLOBALS['xoopsTpl']->assign('navigation', $adminObject->displayNavigation('infofields.php'));
-        $GLOBALS['xoopsTpl']->assign('buttons', $adminObject->displayButton('left', ''));
+        $GLOBALS['xoopsTpl']->assign('navigation', $adminObject->renderNavigation('infofields.php'));
+        $GLOBALS['xoopsTpl']->assign('buttons', $adminObject->renderButton('left', ''));
         // Get Form
         $infofieldsObj = $infofieldsHandler->get($infofieldId);
+        if (!\is_object($infofieldsObj)) {
+            \redirect_header('infofields.php', 3, \_AM_WGTEAMS_INVALID_PARAM);
+        }
         $form          = $infofieldsObj->getFormInfofields();
         $GLOBALS['xoopsTpl']->assign('form', $form->render());
         break;
     case 'delete':
         $infofieldsObj = $infofieldsHandler->get($infofieldId);
-        if (1 == Request::getInt('ok', 0)) {
+        if (!\is_object($infofieldsObj)) {
+            \redirect_header('infofields.php', 3, \_AM_WGTEAMS_INVALID_PARAM);
+        }
+        $templateMain = 'wgteams_admin_infofields.tpl';
+        $GLOBALS['xoopsTpl']->assign('navigation', $adminObject->renderNavigation('infofields.php'));
+        if (1 == Request::getInt('ok')) {
             if (!$GLOBALS['xoopsSecurity']->check()) {
                 \redirect_header('infofields.php', 3, \implode(', ', $GLOBALS['xoopsSecurity']->getErrors()));
             }
             // Get the handler for Relations
             $relationsHandler = $helper->getHandler('Relations');
-
             // Get all Relations objects
             $allRelations = $relationsHandler->getAll();
-
             // Go through all Relations objects
             foreach ($allRelations as $relation) {
                 $relationModified = false;
-
                 // Check each rel_info_X_field
                 for ($i = 1; $i <= 5; $i++) {
                     $infoFieldVar = 'rel_info_' . $i . '_field';
@@ -142,14 +154,19 @@ switch ($op) {
             }
 
             if ($infofieldsHandler->delete($infofieldsObj)) {
-                \redirect_header('infofields.php', 3, _AM_WGTEAMS_FORM_DELETE_OK);
+                \redirect_header("infofields.php?op=list&start=$start&limit=$limit", 3, _AM_WGTEAMS_FORM_DELETE_OK);
             } else {
                 $GLOBALS['xoopsTpl']->assign('error', $infofieldsObj->getHtmlErrors());
             }
         } else {
-            xoops_confirm(['ok' => 1, 'infofield_id' => $infofieldId, 'op' => 'delete'], $_SERVER['REQUEST_URI'], \sprintf(_AM_WGTEAMS_FORM_SURE_DELETE, $infofieldsObj->getVar('infofield_name')));
+            $customConfirm = new Common\Confirm(
+                ['ok' => 1, 'infofield_id' => $infofieldId, 'start' => $start, 'limit' => $limit, 'op' => 'delete'],
+                $_SERVER['REQUEST_URI'],
+                \sprintf(\_AM_WGTEAMS_FORM_SURE_DELETE, $infofieldsObj->getVar('infofield_name')));
+            $form = $customConfirm->getFormConfirm();
+            $GLOBALS['xoopsTpl']->assign('form', $form->render());
         }
         break;
 }
 
-require __DIR__ . '/footer.php';
+require_once __DIR__ . '/footer.php';

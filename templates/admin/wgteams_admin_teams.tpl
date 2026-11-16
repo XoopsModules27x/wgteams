@@ -17,20 +17,24 @@
                 <th class="center"><{$smarty.const._AM_WGTEAMS_TEAM_ONLINE}></th>
                 <th class="center"><{$smarty.const._AM_WGTEAMS_SUBMITTER}></th>
                 <th class="center"><{$smarty.const._AM_WGTEAMS_DATE_CREATE}></th>
-                <th class="center width5"><{$smarty.const._AM_WGTEAMS_FORM_ACTION}></th>
+                <th class="center width-action"><{$smarty.const._AM_WGTEAMS_FORM_ACTION}></th>
             </tr>
         </thead>
         <{if $teams_count|default:false}>
             <tbody id="teams-list">
                 <{foreach item=team from=$teams_list}>
                     <tr class="even" id="torder_<{$team.id}>" >
-                        <td class="center"><img src="<{$wgteams_icons_url}>/16/up_down.png" alt="drag&drop" class="icon-sortable"></td>
+                        <td class="center">
+                            <{if $teams_count|default:0 > 1}>
+                                <i class="icon-sortable fa-solid fa-up-down-left-right"></i>
+                            <{/if}>
+                        </td>
                         <td class="center"><{$team.id}></td>
                         <td class="center"><{$team.name}></td>
                         <td class="center"><{$team.descr}></td>
                         <td class="center">
                             <{if $team.image|default:false}>
-                                <img src="<{$wgteams_upload_url}>/teams/images/<{$team.image}>" alt="teams" style='max-width:50px;' class="<{$team.imagestyle}>" >
+                                <img src="<{$wgteams_upload_url}>/teams/images/<{$team.image}>?v=<{$imageVersion}>" alt="teams" style='max-width:50px;' class="<{$team.imagestyle}>" >
                                 <br><{$team.image_resxy}>
                             <{/if}>
                         </td>
@@ -40,19 +44,31 @@
                         <td class="center"><{$team.displaystyle}></td>
                         <td class="center"><{$team.relscount}></td>
                         <td class="center">
-                            <a href="teams.php?op=set_onoff&amp;team_id=<{$team.id}>" title="<{$team.online}>">
-                                <{if $team.online|default:'' == $smarty.const._YES}>
-                                    <img src="<{xoModuleIcons16 'on.png'}>" alt="teams"></a>
-                                <{else}>
-                                    <img src="<{xoModuleIcons16 'off.png'}>" alt="teams"></a>
-                                <{/if}>
+                            <form action='teams.php' method='post' style='display:inline;'>
+                                <{$wgteams_form_token}>
+                                <input type='hidden' name='op' value='set_onoff'>
+                                <input type='hidden' name='team_id' value='<{$team.id}>'>
+                                <input type='hidden' name='start' value='<{$start}>'>
+                                <input type='hidden' name='limit' value='<{$limit}>'>
+                                <span class='xo-buttons'>
+                                    <{if $team.team_online == 1}>
+                                        <button class='' aria-label="<{$smarty.const._AM_WGTEAMS_IS_ONLINE}>" title="<{$smarty.const._AM_WGTEAMS_IS_ONLINE}>">
+                                            <i class='fa fa-eye'></i>
+                                        </button>
+                                    <{else}>
+                                        <button class='' aria-label="<{$smarty.const._AM_WGTEAMS_IS_OFFLINE}>" title="<{$smarty.const._AM_WGTEAMS_IS_OFFLINE}>">
+                                            <i class='fa fa-eye-slash'></i>
+                                        </button>
+                                    <{/if}>
+                                </span>
+                            </form>
                         </td>
                         <td class="center"><{$team.submitter}></td>
                         <td class="center"><{$team.date_create}></td>
-                        <td class="center  width5">
-                        <a href="teams.php?op=edit&amp;team_id=<{$team.id}>" title="<{$smarty.const._EDIT}>"><img src="<{xoModuleIcons16 'edit.png'}>" alt="teams"></a>
-                        <a href="image_editor.php?op=edit_team&amp;team_id=<{$team.id}>" title="<{$smarty.const._AM_WGTEAMS_IMG_EDITOR}>"><img src="<{$pathModIcon16}>/image_editor.png" alt="<{$smarty.const._AM_WGTEAMS_IMG_EDITOR}>"></a>
-                        <a href="teams.php?op=delete&amp;team_id=<{$team.id}>" title="<{$smarty.const._DELETE}>"><img src="<{xoModuleIcons16 'delete.png'}>" alt="teams"></a>
+                        <td class="center width-action xo-buttons">
+                        <a href="teams.php?op=edit&team_id=<{$team.id}>&start=<{$start}>&limit=<{$limit}>" title="<{$smarty.const._EDIT}>"><i class='fa fa-edit'></i></a>
+                        <a href="image_editor.php?op=edit_team&team_id=<{$team.id}>&start=<{$start}>&limit=<{$limit}>" title="<{$smarty.const._AM_WGTEAMS_IMG_EDITOR}>"><i class='fa fa-image'></i></a>
+                        <a href="teams.php?op=delete&team_id=<{$team.id}>&start=<{$start}>&limit=<{$limit}>" title="<{$smarty.const._DELETE}>"><i class='fa fa-trash'></i></a>
                         </td>
                     </tr>
                 <{/foreach}>
@@ -75,3 +91,34 @@
 <br>
 <!-- Footer -->
 <{include file='db:wgteams_admin_footer.tpl'}>
+
+<script>
+    $(document).ready(function () {
+
+        function saveItemOrder(element) {
+            var list = element.sortable("serialize");
+            var token = $("#xoopsSortToken").val();
+
+            $.post("teams.php?op=order&start=<{$start}>", list + "&XOOPS_TOKEN_REQUEST=<{$wgteams_btn_token|default:''|escape}>")
+                .fail(function (xhr) {
+                    console.error("Error when sorting:", xhr.responseText);
+                });
+        }
+
+        $("#teams-list").sortable({
+            items: "tr:has(td)",
+            opacity: 0.6,
+            cursor: "move",
+
+            update: function (event, ui) {
+                saveItemOrder($(this));
+            },
+
+            receive: function (event, ui) {
+                saveItemOrder($(this));
+            }
+
+        }).disableSelection();
+
+    });
+</script>

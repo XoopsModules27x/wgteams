@@ -29,8 +29,9 @@ require_once \XOOPS_ROOT_PATH . '/modules/wgteams/include/common.php';
 /**
  * @param $options
  * @return array
+ * @throws Exception
  */
-function b_wgteams_teams_show($options)
+function b_wgteams_teams_show($options): array
 {
     require_once \XOOPS_ROOT_PATH . '/modules/wgteams/include/functions.php';
 
@@ -87,8 +88,9 @@ function b_wgteams_teams_show($options)
 /**
  * @param $options
  * @return string
+ * @throws Exception
  */
-function b_wgteams_teams_edit($options)
+function b_wgteams_teams_edit($options): string
 {
     $helper        = Wgteams\Helper::getInstance();
     $teamsHandler = $helper->getHandler('Teams');
