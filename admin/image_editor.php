@@ -343,9 +343,8 @@ switch ($op) {
             }
             \rename($imgTemp, $imgFinal);
         } else {
-            \redirect_header($redir, 2, \_AM_WGTIMELINES_ERROR_SAVE_IE);
+            \redirect_header($redir, 2, \_AM_WGTEAMS_ERROR_SAVE_IE);
         }
-        $ret = \rename($imgTemp, $imgFinal);
         // Set Vars
         $imageObj->setVar($fieldObj, $imgName);
         $imageObj->setVar($submObj, $uid);
