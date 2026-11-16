@@ -220,3 +220,4 @@ require_once __DIR__ . '/modinfo.php';
 \define('_AM_WGTEAMS_IMG_EDITOR_TEAM', "Bildbearbeiter für Team '%s'");
 \define('_AM_WGTEAMS_IMG_EDITOR_MEMBER', "Bildbearbeiter für Mitglied '%s'");
 \define('_AM_WGTEAMS_IMG_EDITOR_NOIMAGE', 'Derzeit kein Bild ausgewählt');
+\define('_AM_WGTEAMS_ERROR_SAVE_IE', 'Fehler beim Speichern des bearbeiteten Bildes');
