@@ -176,6 +176,9 @@ $imgMaxwidthIE  = (int)$helper->getConfig('img_maxwidth_ie');
 $imgMaxheightIE = (int)$helper->getConfig('img_maxheight_ie');
 $imgMimetypes   = $helper->getConfig('img_mimetypes');
 
+// force reload of images, e.g. after cropping
+$GLOBALS['xoopsTpl']->assign('imageVersion', time());
+
 switch ($op) {
 
     case 'creategrid':
