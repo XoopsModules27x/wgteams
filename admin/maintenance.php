@@ -133,20 +133,6 @@ switch ($op) {
 }
 
 /**
- * @param $val
- * @return float|int
- */
-function returnCleanBytes($val): float|int
-{
-    return match (mb_substr($val, -1)) {
-        'K', 'k' => (int)$val * 1024,
-        'M', 'm' => (int)$val * 1048576,
-        'G', 'g' => (int)$val * 1073741824,
-        default => $val,
-    };
-}
-
-/**
  * get unused images of given directory
  * @param array $unused
  * @param string $directory
@@ -154,7 +140,7 @@ function returnCleanBytes($val): float|int
  * @return bool
  * @throws Exception
  */
-function getUnusedImages(array $unused, string $directory, string $url): bool
+function getUnusedImages(array &$unused, string $directory, string $url): bool
 {
     // Get instance of module
     $helper        = Helper::getInstance();

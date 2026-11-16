@@ -67,8 +67,8 @@ $GLOBALS['xoopsTpl']->assign('navigation', $adminObject->renderNavigation('index
 //------------- Test Data ----------------------------
 if ($helper->getConfig('displaySampleButton')) {
     require_once \dirname(__DIR__) . '/testdata/index.php';
-    $adminObject->addItemButton(\_CO_WGTIMELINES_LOAD_SAMPLEDATA, '__DIR__ . /../../testdata/index.php?op=load');
-    $adminObject->addItemButton(\_CO_WGTIMELINES_SAVE_SAMPLEDATA, '__DIR__ . /../../testdata/index.php?op=save');
+    $adminObject->addItemButton(\_CO_WGTEAMS_LOAD_SAMPLEDATA, '__DIR__ . /../../testdata/index.php?op=load');
+    $adminObject->addItemButton(\_CO_WGTEAMS_SAVE_SAMPLEDATA, '__DIR__ . /../../testdata/index.php?op=save');
     //    $adminObject->addItemButton(\_CO_WGTIMELINES_EXPORT_SCHEMA, '__DIR__ . /../../testdata/index.php?op=exportschema', 'add');
     $GLOBALS['xoopsTpl']->assign('buttons',  $adminObject->renderButton('left'));
 }

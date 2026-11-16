@@ -180,10 +180,13 @@ switch ($op) {
         break;
     case 'delete':
         $relationsObj = $relationsHandler->get($relId);
+        if (!\is_object($relationsObj)) {
+            \redirect_header('relations.php', 3, \_AM_WGTEAMS_INVALID_PARAM);
+        }
         $teamId = $relationsObj->getVar('rel_team_id');
         $teamObj = $teamsHandler->get($teamId);
         $memberObj = $membersHandler->get($relationsObj->getVar('rel_member_id'));
-        if (!\is_object($relationsObj) || !\is_object($teamObj) || !\is_object($memberObj)) {
+        if (!\is_object($teamObj) || !\is_object($memberObj)) {
             \redirect_header('relations.php', 3, \_AM_WGTEAMS_INVALID_PARAM);
         }
         $templateMain = 'wgteams_admin_relations.tpl';

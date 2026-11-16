@@ -64,7 +64,7 @@ class MembersHandler extends \XoopsPersistableObjectHandler
      * @param  $fields
      * @return \XoopsObject
      */
-    public function get($id = null, $fields = null): \XoopsObject
+    public function get($id = null, $fields = null): ?\XoopsObject
     {
         return parent::get($id, $fields);
     }

@@ -1,10 +1,3 @@
-<{if $bookmarks|default:false != 0}>
-    <{include file="db:system_bookmarks.tpl"}>
-<{/if}>
-
-<{if $fbcomments|default:false != 0}>
-    <{include file="db:system_fbcomments.tpl"}>
-<{/if}>
 <{if $copyright|default:'' != ''}>
     <div class="pull-right"><{$copyright}></div>
 <{/if}>

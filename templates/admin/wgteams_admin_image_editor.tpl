@@ -89,7 +89,7 @@
             <{if $no_blank|default:false}>
         <img id='currentImg' class='imageeditor-img center' src='<{$imgCurrent.src}>' alt='<{$imgCurrent.img_name}>'>
             <p><{$smarty.const._AM_WGTEAMS_IMG_EDITOR_CURRENT2}>: <{$image_path}><br>
-                <{$smarty.const._AM_WGTEAMS_IMG_EDITOR_RESXY}>: <{$albimage_width}> / <{$albimage_height}></p>
+                <{$smarty.const._AM_WGTEAMS_IMG_EDITOR_RESXY}>: <{$image_width}> / <{$image_height}></p>
             <{else}>
             <p class='imageeditor-no_image'><{$smarty.const._AM_WGTEAMS_IMG_EDITOR_NOIMAGE}></p>
             <{/if}>

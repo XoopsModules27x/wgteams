@@ -22,15 +22,15 @@ declare(strict_types=1);
 defined('XOOPS_ROOT_PATH') || exit('Restricted access');
 
 /**
- * @param $val
- * @return float|int
+ * @param int $val
+ * @return int
  */
-function wgteamsReturnBytes($val): float|int
+function wgteamsReturnBytes($val): int
 {
     return match (mb_substr($val, -1)) {
         'K', 'k' => (int)$val * 1024,
         'M', 'm' => (int)$val * 1048576,
         'G', 'g' => (int)$val * 1073741824,
-        default => $val,
+        default => (int)$val,
     };
 }

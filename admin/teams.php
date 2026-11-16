@@ -136,9 +136,9 @@ switch ($op) {
         $fileName       = $_FILES['attachedfile']['name'];
         $imageMimetype  = $_FILES['attachedfile']['type'];
         $uploaderErrors = '';
-        $maxwidth  = $helper->getConfig('maxwidth');
-        $maxheight = $helper->getConfig('maxheight');
-        $uploader = new \XoopsMediaUploader(\WGTEAMS_UPLOAD_PATH . '/teams/images', $helper->getConfig('wgteams_img_mimetypes'), $helper->getConfig('wgteams_img_maxsize'), $maxwidth, $maxheight);
+        $imgMaxwidth  = $helper->getConfig('img_maxwidth');
+        $imgMaxheight = $helper->getConfig('img_maxheight');
+        $uploader = new \XoopsMediaUploader(\WGTEAMS_UPLOAD_PATH . '/teams/images', $helper->getConfig('img_mimetypes'), $helper->getConfig('img_maxsize'), $imgMaxwidth, $imgMaxheight);
         if ($uploader->fetchMedia($uploadFile0)) {
             $extension = \preg_replace('/^.+\.([^.]+)$/sU', '', $fileName);
             $imgName   = mb_substr(\str_replace(' ', '', Request::getString('team_name')), 0, 20) . '_' . $extension;
@@ -153,13 +153,13 @@ switch ($op) {
                 $img_resize = Request::getInt('img_resize');
                 if (1 == $img_resize) {
                     $imgHandler                = new Wgteams\Resizer();
-                    $maxwidth_imgeditor        = (int)$helper->getConfig('maxwidth_imgeditor');
-                    $maxheight_imgeditor       = (int)$helper->getConfig('maxheight_imgeditor');
+                    $imgMaxwidth_imgeditor        = (int)$helper->getConfig('img_maxwidth_ie');
+                    $imgMaxheight_imgeditor       = (int)$helper->getConfig('img_maxheight_ie');
                     $imgHandler->sourceFile    = \WGTEAMS_UPLOAD_PATH . '/teams/images/' . $savedFilename;
                     $imgHandler->endFile       = \WGTEAMS_UPLOAD_PATH . '/teams/images/' . $savedFilename;
                     $imgHandler->imageMimetype = $imageMimetype;
-                    $imgHandler->maxWidth      = $maxwidth_imgeditor;
-                    $imgHandler->maxHeight     = $maxheight_imgeditor;
+                    $imgHandler->maxWidth      = $imgMaxwidth_imgeditor;
+                    $imgHandler->maxHeight     = $imgMaxheight_imgeditor;
                     $result = $imgHandler->resizeImage();
                     $teamsObj->setVar('team_image', $savedFilename);
                 }

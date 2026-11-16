@@ -112,9 +112,9 @@ switch ($op) {
         $fileName       = $_FILES['attachedfile']['name'];
         $imageMimetype  = $_FILES['attachedfile']['type'];
         $uploaderErrors = '';
-        $maxwidth  = $helper->getConfig('maxwidth');
-        $maxheight = $helper->getConfig('maxheight');
-        $uploader = new \XoopsMediaUploader(\WGTEAMS_UPLOAD_PATH . '/members/images', $helper->getConfig('wgteams_img_mimetypes'), $helper->getConfig('wgteams_img_maxsize'), $maxwidth, $maxheight);
+        $imgMaxwidth  = $helper->getConfig('img_maxwidth');
+        $imgMaxheight = $helper->getConfig('img_maxheight');
+        $uploader = new \XoopsMediaUploader(\WGTEAMS_UPLOAD_PATH . '/members/images', $helper->getConfig('img_mimetypes'), $helper->getConfig('img_maxsize'), $imgMaxwidth, $imgMaxheight);
         if ($uploader->fetchMedia($uploadFile0)) {
             $extension = \preg_replace('/^.+\.([^.]+)$/sU', '', $fileName);
             $imgName   = mb_substr(\str_replace(' ', '', Request::getString('member_lastname') . Request::getString('member_firstname')), 0, 20) . '_' . $extension;
@@ -128,13 +128,13 @@ switch ($op) {
                 $img_resize = Request::getInt('img_resize');
                 if (1 == $img_resize) {
                     $imgHandler                = new Wgteams\Resizer();
-                    $maxwidth_imgeditor        = (int)$helper->getConfig('maxwidth_imgeditor');
-                    $maxheight_imgeditor       = (int)$helper->getConfig('maxheight_imgeditor');
+                    $imgMaxwidth_imgeditor        = (int)$helper->getConfig('img_maxwidth_ie');
+                    $imgMaxheight_imgeditor       = (int)$helper->getConfig('img_maxheight_ie');
                     $imgHandler->sourceFile    = \WGTEAMS_UPLOAD_PATH . '/members/images/' . $savedFilename;
                     $imgHandler->endFile       = \WGTEAMS_UPLOAD_PATH . '/members/images/' . $savedFilename;
                     $imgHandler->imageMimetype = $imageMimetype;
-                    $imgHandler->maxWidth      = $maxwidth_imgeditor;
-                    $imgHandler->maxHeight     = $maxheight_imgeditor;
+                    $imgHandler->maxWidth      = $imgMaxwidth_imgeditor;
+                    $imgHandler->maxHeight     = $imgMaxheight_imgeditor;
                     $result = $imgHandler->resizeImage();
                     $membersObj->setVar('member_image', $savedFilename);
                 }
@@ -182,7 +182,7 @@ switch ($op) {
         if (!\is_object($membersObj)) {
             \redirect_header('members.php', 3, \_AM_WGTEAMS_INVALID_PARAM);
         }
-        $templateMain = 'wgteams_admin_infofields.tpl';
+        $templateMain = 'wgteams_admin_members.tpl';
         $GLOBALS['xoopsTpl']->assign('navigation', $adminObject->renderNavigation('members.php'));
         if (1 == Request::getInt('ok')) {
             if (!$GLOBALS['xoopsSecurity']->check()) {

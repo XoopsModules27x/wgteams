@@ -112,7 +112,6 @@ $modversion['templates'][] = ['file' => 'wgteams_member_modal_left.tpl', 'descri
 $modversion['templates'][] = ['file' => 'wgteams_member_modal_right.tpl', 'description' => ''];
 $modversion['templates'][] = ['file' => 'wgteams_block_ext_members_list.tpl', 'description' => '', 'type' => 'block'];
 $modversion['templates'][] = ['file' => 'wgteams_block_ext_teams_list.tpl', 'description' => '', 'type' => 'block'];
-$modversion['templates'][] = ['file' => 'wgteams_block_ext_teamsmembers.tpl', 'description' => '', 'type' => 'block'];
 
 // ------------------- Mysql ------------------- //
 $modversion['sqlfile']['mysql'] = 'sql/mysql.sql';
@@ -256,7 +255,7 @@ while ($i* 1048576 <= $maxSize) {
     $i += $increment;
 }
 $modversion['config'][] = [
-    'name'        => 'wgteams_img_maxsize',
+    'name'        => 'img_maxsize',
     'title'       => '_MI_WGTEAMS_IMG_MAXSIZE',
     'description' => '_MI_WGTEAMS_IMG_MAXSIZE_DESC',
     'formtype'    => 'select',
@@ -267,7 +266,7 @@ $modversion['config'][] = [
 
 //Uploads : mimetypes of images
 $modversion['config'][] = [
-    'name'        => 'wgteams_img_mimetypes',
+    'name'        => 'img_mimetypes',
     'title'       => '_MI_WGTEAMS_IMG_MIMETYPES',
     'description' => '_MI_WGTEAMS_IMG_MIMETYPES_DESC',
     'formtype'    => 'select_multi',
@@ -286,9 +285,9 @@ $modversion['config'][] = [
 
 // Uploads : max width of images for upload
 $modversion['config'][] = [
-    'name'        => 'maxwidth',
-    'title'       => '_MI_WGTEAMS_MAXWIDTH',
-    'description' => '_MI_WGTEAMS_MAXWIDTH_DESC',
+    'name'        => 'img_maxwidth',
+    'title'       => '_MI_WGTEAMS_IMG_MAXWIDTH',
+    'description' => '_MI_WGTEAMS_IMG_MAXWIDTH_DESC',
     'formtype'    => 'textbox',
     'valuetype'   => 'int',
     'default'     => 1000,
@@ -296,18 +295,18 @@ $modversion['config'][] = [
 
 // Uploads : max height of images for upload
 $modversion['config'][] = [
-    'name'        => 'maxheight',
-    'title'       => '_MI_WGTEAMS_MAXHEIGHT',
-    'description' => '_MI_WGTEAMS_MAXHEIGHT_DESC',
+    'name'        => 'img_maxheight',
+    'title'       => '_MI_WGTEAMS_IMG_MAXHEIGHT',
+    'description' => '_MI_WGTEAMS_IMG_MAXHEIGHT_DESC',
     'formtype'    => 'textbox',
     'valuetype'   => 'int',
     'default'     => 1000,
 ];
 // Uploads : max width of images for upload
 $modversion['config'][] = [
-    'name'        => 'maxwidth_imgeditor',
-    'title'       => '_MI_WGTEAMS_MAXWIDTH_IMGEDITOR',
-    'description' => '_MI_WGTEAMS_MAXWIDTH_IMGEDITOR_DESC',
+    'name'        => 'img_maxwidth_ie',
+    'title'       => '_MI_WGTEAMS_IMG_MAXWIDTH_IE',
+    'description' => '_MI_WGTEAMS_IMG_MAXWIDTH_IE_DESC',
     'formtype'    => 'textbox',
     'valuetype'   => 'int',
     'default'     => 400,
@@ -315,9 +314,9 @@ $modversion['config'][] = [
 
 // Uploads : max height of images for upload
 $modversion['config'][] = [
-    'name'        => 'maxheight_imgeditor',
-    'title'       => '_MI_WGTEAMS_MAXHEIGHT_IMGEDITOR',
-    'description' => '_MI_WGTEAMS_MAXHEIGHT_IMGEDITOR_DESC',
+    'name'        => 'img_maxheight_ie',
+    'title'       => '_MI_WGTEAMS_IMG_MAXHEIGHT_IE',
+    'description' => '_MI_WGTEAMS_IMG_MAXHEIGHT_IE_DESC',
     'formtype'    => 'textbox',
     'valuetype'   => 'int',
     'default'     => 400,

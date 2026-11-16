@@ -219,3 +219,4 @@ require_once __DIR__ . '/modinfo.php';
 \define('_AM_WGTEAMS_INVALID_PARAM_IMG', 'Ungültiger Parameter für Bildgröße/-dimensionen. Bitte überprüfen Sie die Moduleinstellungen.');
 \define('_AM_WGTEAMS_IMG_EDITOR_TEAM', "Bildbearbeiter für Team '%s'");
 \define('_AM_WGTEAMS_IMG_EDITOR_MEMBER', "Bildbearbeiter für Mitglied '%s'");
+\define('_AM_WGTEAMS_IMG_EDITOR_NOIMAGE', 'Derzeit kein Bild ausgewählt');
