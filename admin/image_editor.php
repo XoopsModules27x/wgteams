@@ -74,7 +74,11 @@ if ($imageClass === Constants::IMAGECLASS_MEMBER) {
     $nameObj      = 'member_firstname';
     $fieldObj     = 'member_image';
     $submObj      = 'member_submitter';
-    $imageInfo    = \sprintf(\_AM_WGTEAMS_IMG_EDITOR_MEMBER, $imageObj->getVar('member_firstname') . ' ' . $imageObj->getVar('member_lastname'));
+    $imageInfo = htmlspecialchars(
+        sprintf(_AM_WGTEAMS_IMG_EDITOR_MEMBER, $imageObj->getVar('member_firstname') . ' ' . $imageObj->getVar('member_lastname')),
+        ENT_QUOTES | ENT_SUBSTITUTE,
+        'UTF-8'
+    );
 } else {
     $imageId      = $teamId;
     $imageObj     = $teamsHandler->get($imageId);
@@ -93,7 +97,11 @@ if ($imageClass === Constants::IMAGECLASS_MEMBER) {
     $nameObj      = 'team_name';
     $fieldObj     = 'team_image';
     $submObj      = 'team_submitter';
-    $imageInfo    = \sprintf(\_AM_WGTEAMS_IMG_EDITOR_TEAM, $imageObj->getVar('team_name'));
+    $imageInfo = htmlspecialchars(
+        sprintf(_AM_WGTEAMS_IMG_EDITOR_TEAM, $imageObj->getVar('team_name')),
+        ENT_QUOTES | ENT_SUBSTITUTE,
+        'UTF-8'
+    );
 }
 
 $imgCurrent['img_name'] = $imageObj->getVar($fieldObj);
@@ -139,6 +147,10 @@ $GLOBALS['xoopsTpl']->assign('wgteams_upload_path', \WGTEAMS_UPLOAD_PATH);
 $GLOBALS['xoopsTpl']->assign('wgteams_image_editor', \WGTEAMS_URL . '/admin');
 $GLOBALS['xoopsTpl']->assign('wgteams_upload_image_url', $imgUrl);
 $GLOBALS['xoopsTpl']->assign('gridtarget', $imgName);
+$GLOBALS['xoopsTpl']->assign('gridtarget_json', json_encode(
+    $imgName,
+    JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT
+));
 $GLOBALS['xoopsTpl']->assign('imgCurrent', $imgCurrent);
 $GLOBALS['xoopsTpl']->assign('imageId', $imageId);
 $GLOBALS['xoopsTpl']->assign('imageOrigin', $imageOrigin);

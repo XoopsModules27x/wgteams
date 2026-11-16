@@ -446,6 +446,7 @@
 
         function createGrid(type) {
             var gridImg = $id('gridImg');
+            var gridtarget = <{$gridtarget_json}>;
             gridImg.src = '<{$wgteams_url}>/assets/images/loading.gif';
 
             var params = new URLSearchParams();
@@ -456,7 +457,7 @@
             for (var i = 1; i <= type; i++) {
                 params.append('src' + i, $id('imageGrid' + i).getAttribute('src'));
             }
-            params.append('target', '<{$gridtarget}>');
+            params.append('target', gridtarget);
 
             fetch('image_editor.php', {
                 method: 'POST',
@@ -464,8 +465,8 @@
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: params.toString()
             }).then(function () {
-                gridImg.src = '<{$wgteams_upload_url}>/temp/<{$gridtarget}>?' + new Date().getTime();
-                $id('gridImgFinal').value = '<{$wgteams_upload_path}>/temp/<{$gridtarget}>';
+                gridImg.src = '<{$wgteams_upload_url}>/temp/' + encodeURIComponent(gridtarget) + '?' + new Date().getTime();
+                $id('gridImgFinal').value = '<{$wgteams_upload_path}>/temp/' + gridtarget;
                 gridImg.classList.add('imageeditor-img');
                 $id('btnApplyGrid').classList.remove('disabled');
             });
