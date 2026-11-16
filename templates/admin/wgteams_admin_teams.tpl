@@ -34,7 +34,7 @@
                         <td class="center"><{$team.descr}></td>
                         <td class="center">
                             <{if $team.image|default:false}>
-                                <img src="<{$wgteams_upload_url}>/teams/images/<{$team.image}>" alt="teams" style='max-width:50px;' class="<{$team.imagestyle}>" >
+                                <img src="<{$wgteams_upload_url}>/teams/images/<{$team.image}>?v=<{$imageVersion}>" alt="teams" style='max-width:50px;' class="<{$team.imagestyle}>" >
                                 <br><{$team.image_resxy}>
                             <{/if}>
                         </td>

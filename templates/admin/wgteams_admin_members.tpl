@@ -30,7 +30,7 @@
                     <td class="center"><{$member.email}></td>
                     <td class="center">
                         <{if $member.image|default:false}>
-                            <img src="<{$wgteams_upload_url}>/members/images/<{$member.image}>" alt="members" style='max-width:50px;'><br><{$member.image_resxy}>
+                            <img src="<{$wgteams_upload_url}>/members/images/<{$member.image}>?v=<{$imageVersion}>" alt="members" style='max-width:50px;'><br><{$member.image_resxy}>
                         <{/if}>
                     </td>
                     <td class="center"><{$member.submitter}></td>

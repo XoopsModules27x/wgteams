@@ -256,6 +256,13 @@
                             <input type="hidden" name="target" value="<{$croptarget|default:''}>">
                             <input type="hidden" name="start" value="<{$start}>">
                             <input type="hidden" name="limit" value="<{$limit}>">
+                            <input type="hidden" id="dataX">
+                            <input type="hidden" id="dataY">
+                            <input type="hidden" id="dataHeight">
+                            <input type="hidden" id="dataWidth">
+                            <input type="hidden" id="dataRotate">
+                            <input type="hidden" id="dataScaleX">
+                            <input type="hidden" id="dataScaleY">
                             <{$wgteams_form_token}>
                             <button type="submit" id="btnCropApply" class="btn <{$btn_style}> disabled">
                                 <{$smarty.const._AM_WGTEAMS_IMG_EDITOR_APPLY}>

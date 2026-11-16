@@ -67,6 +67,8 @@ switch ($op) {
                 $pagenav = new \XoopsPageNav($membersCount, $limit, $start, 'start', 'op=list&limit=' . $limit);
                 $GLOBALS['xoopsTpl']->assign('pagenav', $pagenav->renderNav());
             }
+            // force reload of images, e.g. after cropping
+            $GLOBALS['xoopsTpl']->assign('imageVersion', time());
         } else {
             $GLOBALS['xoopsTpl']->assign('error', _AM_WGTEAMS_THEREARENT_MEMBERS);
         }
