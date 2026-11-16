@@ -337,10 +337,14 @@ switch ($op) {
         if (!$GLOBALS['xoopsSecurity']->check()) {
             \redirect_header('index.php', 3, \implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
         }
-        if (\is_file($imgFinal)) {
-            \unlink($imgFinal);
+        if (\is_file($imgTemp)) {
+            if (\is_file($imgFinal)) {
+                \unlink($imgFinal);
+            }
+            \rename($imgTemp, $imgFinal);
+        } else {
+            \redirect_header($redir, 2, \_AM_WGTEAMS_ERROR_SAVE_IE);
         }
-        $ret = \rename($imgTemp, $imgFinal);
         // Set Vars
         $imageObj->setVar($fieldObj, $imgName);
         $imageObj->setVar($submObj, $uid);
